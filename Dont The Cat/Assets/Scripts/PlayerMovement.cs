@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    private PlayerScript _playerScript;
+    
     public PlayerState state;
 
     public float playerSpeed;
@@ -22,6 +25,21 @@ public class PlayerMovement : MonoBehaviour
     private float xRotation, yRotation;
 
     public CharacterController CharacterController;
+
+    private void Awake()
+    {
+        _playerScript = GetComponent<PlayerScript>();
+    }
+
+    private void OnEnable()
+    {
+        _playerScript.onPlayerStateChange += ProcessAction_OnPlayerStateChange;
+    }
+
+    private void OnDisable()
+    {
+        _playerScript.onPlayerStateChange -= ProcessAction_OnPlayerStateChange;
+    }
 
     // Update is called once per frame
     void Update()
@@ -72,13 +90,17 @@ public class PlayerMovement : MonoBehaviour
         //transform.Rotate(_mouseY * Time.deltaTime * Vector3.right);
         //transform.Rotate( _mouseX * Time.deltaTime * Vector3.up);
     }
+
+    #region EventMethods
+
+    void ProcessAction_OnPlayerStateChange(PlayerState newState)
+    {
+        state = newState;
+    }
+
+    #endregion
     
     
 }
 
-public enum PlayerState
-{
-    Walking,
-    Petting,
-    Working,
-}
+
