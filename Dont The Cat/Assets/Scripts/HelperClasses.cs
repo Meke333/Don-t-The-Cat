@@ -10,6 +10,8 @@ public class Timer
     private int _timerTimeInMilliSeconds;
     public Action onTimerDone;
 
+    private bool _isTimerInterrupted;
+
     public void SetTimer(int newTime)
     {
         _timerTimeInMilliSeconds = newTime;
@@ -18,7 +20,15 @@ public class Timer
     async public void RunTimer()
     {
         await Task.Delay(_timerTimeInMilliSeconds);
+        if (_isTimerInterrupted) 
+            return; 
+        
         onTimerDone?.Invoke();
+    }
+    
+    public void InterruptTimer()
+    {
+        _isTimerInterrupted = true;
     }
 
 }

@@ -17,3 +17,21 @@ public class CatScript : MonoBehaviour
         onCatStateChange += value => _state = value;
     }
 }
+
+public enum CatLocation
+{
+    Nothing,
+    Vase,
+    Urne,
+    Radio,
+    SelfDestructButton
+}
+
+public enum CatState
+{
+    Unpetted,
+    InPetMode,
+    Pleased,
+    Overpetted,
+    UnderPetted,
+}
