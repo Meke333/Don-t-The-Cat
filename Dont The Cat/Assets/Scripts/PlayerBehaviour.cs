@@ -307,7 +307,7 @@ public class PlayerBehaviour : MonoBehaviour
         //Look at cat
         CameraPosition.LookAt(CatPosition);
 
-        //SceneManager.LoadScene("MENU");
+        SceneManager.LoadScene("MENU");
     }
 
     void Looking()
@@ -345,6 +345,9 @@ public class PlayerBehaviour : MonoBehaviour
         {
             _playerScript.onPlayerStateChange.Invoke(PlayerState.Walking);
             setTriggerKeyIcon(false, 0); //hide
+        } else
+        {
+            _playerScript.onPlayerStateChange.Invoke(PlayerState.Die);
         }
     }
 
