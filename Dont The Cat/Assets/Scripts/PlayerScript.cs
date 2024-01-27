@@ -9,15 +9,7 @@ public class PlayerScript : MonoBehaviour
     
     public Action<PlayerState> onPlayerStateChange;
     
-    private void OnEnable()
-    {
-        onPlayerStateChange += value => _state = value;
-    }
-
-    private void OnDisable()
-    {
-        onPlayerStateChange -= value => _state = value;
-    }
+    
 }
 
 public enum PlayerState
