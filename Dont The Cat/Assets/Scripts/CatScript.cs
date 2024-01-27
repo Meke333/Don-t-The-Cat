@@ -10,6 +10,8 @@ public class CatScript : MonoBehaviour
 
     public Action<CatLocation> onCatLocationChange;
     public Action<CatState> onCatStateChange;
+    public Action onCatJump;
+    public Action onCatLanded;
 
     private void OnEnable()
     {
