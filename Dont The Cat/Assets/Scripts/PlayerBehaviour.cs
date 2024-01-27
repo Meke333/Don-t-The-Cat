@@ -52,6 +52,8 @@ public class PlayerBehaviour : MonoBehaviour
     public int catPettingTime;
     bool _isCatPetTimerActive;
 
+    public bool isCatPetAble;
+
     private void Awake()
     {
         _playerScript = GetComponent<PlayerScript>();
@@ -65,6 +67,7 @@ public class PlayerBehaviour : MonoBehaviour
         catPettingTimer.onTimerDone += ProcessAction_CatTimerDone;
         await Task.Yield();
         GameEventManager.Instance.onCatLocationSet += ProcessAction_OnCatLocationSet;
+        GameEventManager.Instance.onCatNearTheObject += ProcessAction_OnCatNearTheObject;
     }
 
     private void OnDisable()
@@ -72,6 +75,7 @@ public class PlayerBehaviour : MonoBehaviour
         _playerScript.onPlayerStateChange -= ProcessAction_OnPlayerStateChange;
         catPettingTimer.onTimerDone -= ProcessAction_CatTimerDone;
         GameEventManager.Instance.onCatLocationSet -= ProcessAction_OnCatLocationSet;
+        GameEventManager.Instance.onCatNearTheObject -= ProcessAction_OnCatNearTheObject;
     }
 
     private void setTriggerKeyIcon(bool visible, int key) //key -> 0:Q, 1:E
@@ -80,8 +84,11 @@ public class PlayerBehaviour : MonoBehaviour
         triggerIcon.sprite = (key == 0 ? q_key_icon : e_key_icon);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
+        if (!isCatPetAble)
+            return;
+        
         switch (other.gameObject.tag)
         {
             case "cat_location_vase":
@@ -325,6 +332,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     void ProcessAction_CatTimerDone()
     {
+        isCatPetAble = false;
         _isCatPetTimerActive = false;
         GameEventManager.Instance.onCatInteraction?.Invoke(catMeter);
     }
@@ -332,6 +340,11 @@ public class PlayerBehaviour : MonoBehaviour
     void ProcessAction_OnCatLocationSet(CatLocation location)
     {
         cat_location = location;
+    }
+
+    void ProcessAction_OnCatNearTheObject()
+    {
+        isCatPetAble = true;
     }
 
     #endregion

@@ -18,6 +18,7 @@ public class CatAnimator : MonoBehaviour
         public static readonly int AnticipationToTheIncident = Animator.StringToHash("AnticipationToTheIncident");
         public static readonly int IsPetting = Animator.StringToHash("IsPetting");
         public static readonly int InPetState = Animator.StringToHash("InPetState");
+        public static readonly int IsJumping = Animator.StringToHash("IsJumping");
         public static readonly int IsOverpet = Animator.StringToHash("IsOverpet");
         public static readonly int PetTimerDone = Animator.StringToHash("PetTimerDone");
         public static readonly int HasLanded = Animator.StringToHash("HasLanded");
@@ -32,6 +33,8 @@ public class CatAnimator : MonoBehaviour
     {
         //_catScript.onCatLocationChange += ProcessAction_OnCatLocation;
         _catScript.onCatStateChange += ProcessAction_OnCatState;
+        _catScript.onCatJump += ProcessAction_OnCatJump;
+        _catScript.onCatLanded += ProcessAction_OnCatLanded;
         await Task.Yield();
         GameEventManager.Instance.onCatLocationSet += ProcessAction_OnCatLocation;
         GameEventManager.Instance.onCatInPetState += ProcessAction_OnCatInPetState;
@@ -41,7 +44,9 @@ public class CatAnimator : MonoBehaviour
     private void OnDisable()
     {
         //_catScript.onCatLocationChange -= ProcessAction_OnCatLocation;
+        _catScript.onCatJump -= ProcessAction_OnCatJump;
         _catScript.onCatStateChange -= ProcessAction_OnCatState;
+        _catScript.onCatLanded -= ProcessAction_OnCatLanded;
         GameEventManager.Instance.onCatLocationSet -= ProcessAction_OnCatLocation;
         GameEventManager.Instance.onCatInPetState -= ProcessAction_OnCatInPetState;
         GameEventManager.Instance.onCatGettingPet -= ProcessAction_OnCatGettingPet;
@@ -109,6 +114,16 @@ public class CatAnimator : MonoBehaviour
     void ProcessAction_OnCatGettingPet()
     {
         catAnimator.SetTrigger(Names.IsPetting);
+    }
+
+    void ProcessAction_OnCatJump()
+    {
+        catAnimator.SetTrigger(Names.IsJumping);
+    }
+
+    void ProcessAction_OnCatLanded()
+    {
+        catAnimator.SetTrigger(Names.HasLanded);
     }
     
 

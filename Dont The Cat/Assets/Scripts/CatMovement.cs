@@ -3,9 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CatMovement : MonoBehaviour
 {
+    private CatScript _catScript;
+
+    public AnimationCurve jumpPositionAnimation;
+    public float jumpDistanceForward;
+    public float jumpDurationInSeconds;
+    
     public float speed;
     
     [SerializeField] private CatLocation targetLocationEnum;
@@ -21,6 +28,11 @@ public class CatMovement : MonoBehaviour
     public CharacterController characterController;
 
     public LayerMask layerMask;
+
+    private void Awake()
+    {
+        _catScript = GetComponent<CatScript>();
+    }
 
     private async void OnEnable()
     {
@@ -43,16 +55,55 @@ public class CatMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Hello: " + other.gameObject.layer + layerMask.value);
+        switch (other.gameObject.tag)
+        {
+            case "cat_location_vase":
+                if (targetLocationEnum != CatLocation.Vase)
+                    return;
+                break;
+            case "cat_location_urne":
+                if (targetLocationEnum != CatLocation.Urne)
+                    return;
+                break;
+            case "cat_location_radio":
+                if (targetLocationEnum != CatLocation.Radio)
+                    return;
+                break;
+            case "cat_location_selfdestruct_button":
+                if (targetLocationEnum != CatLocation.SelfDestructButton)
+                    return;
+                break;
+        }
         
-        if (layerMask == (layerMask | (1 << other.gameObject.layer)))
-            return;
-
         _isTargetActive = false;
         
+        _catScript.onCatJump?.Invoke();
+        
         //Activate Jump Sequence
-        /////////////////////////
+        JumpSequence();
     }
+
+    #region Methods
+
+    async void JumpSequence()
+    {
+        float currentTime = 0;
+
+        while (currentTime < jumpDurationInSeconds)
+        {
+            float progressPercentage = currentTime/jumpDurationInSeconds;
+
+            characterController.Move((Vector3.up * progressPercentage) + (Time.deltaTime * jumpDistanceForward * Vector3.forward));
+            
+            currentTime += Time.deltaTime;
+            await Task.Yield();
+        }
+        
+        _catScript.onCatLanded.Invoke();
+        GameEventManager.Instance.onCatNearTheObject?.Invoke();
+    }
+
+    #endregion
 
     #region EventMethods
 
