@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -54,10 +55,11 @@ public class PlayerBehaviour : MonoBehaviour
         catPettingTimer.SetTimer(catPettingTime);
     }
 
-    private void OnEnable()
+    async private void OnEnable()
     {
         _playerScript.onPlayerStateChange += ProcessAction_OnPlayerStateChange;
         catPettingTimer.onTimerDone += ProcessAction_CatTimerDone;
+        await Task.Yield();
         GameEventManager.Instance.onCatLocationSet += ProcessAction_OnCatLocationSet;
     }
 
@@ -235,16 +237,16 @@ public class PlayerBehaviour : MonoBehaviour
         cube1Material.color = new Color(1 - (float)catMeter, (float)catMeter, 0);
         cube2Material.color = new Color(0, 0, 1);
 
-        // Überprüft, ob die linke Maustaste gedrückt wird
+        // ï¿½berprï¿½ft, ob die linke Maustaste gedrï¿½ckt wird
         if (Input.GetMouseButton(0))
         {
             // Wandelt die Mausposition in einen Ray um
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            // Struktur, um Informationen über den Raycast zu speichern
+            // Struktur, um Informationen ï¿½ber den Raycast zu speichern
             RaycastHit hit;
 
-            // Führt den Raycast aus
+            // Fï¿½hrt den Raycast aus
             if (Physics.Raycast(ray, out hit))
             {
                 // Hit-Informationen nutzen

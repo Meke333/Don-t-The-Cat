@@ -13,14 +13,11 @@ public class CatBehavior : MonoBehaviour
     public CatLocation nextLocation;
     
     public CatState state = CatState.Unpetted;
-    public CatState nextState;
     
     public StateStage stage = StateStage.Enter;
 
     private Timer _timer = new Timer();
     public bool isTimerDone;
-
-    public bool isPleased;
 
     public int reactionTime;
     public int catMinNothingTime;
@@ -84,6 +81,7 @@ public class CatBehavior : MonoBehaviour
 
     void ProcessStage()
     {
+        
         ProcessState();
         
         switch (stage)
@@ -96,8 +94,10 @@ public class CatBehavior : MonoBehaviour
             case StateStage.Exit:
                 location = nextLocation;
                 GameEventManager.Instance.onCatLocationSet?.Invoke(location);
+                stage = StateStage.Enter;
                 break;
         }
+        
     }
     
 
@@ -123,7 +123,6 @@ public class CatBehavior : MonoBehaviour
                 
                 break;
             case StateStage.Exit:
-                stage = StateStage.Enter;
                 break;
         }
     }
@@ -148,7 +147,6 @@ public class CatBehavior : MonoBehaviour
                 
                 break;
             case StateStage.Exit:
-                stage = StateStage.Enter;
                 break;
         }
     }
@@ -161,21 +159,68 @@ public class CatBehavior : MonoBehaviour
                 SetDangerTimer();
                 break;
             case StateStage.Update:
+                //if Timer is done => You Dead
+                if (!isTimerDone)
+                    return;
+                
+                if (state != CatState.InPetMode)
+                    return;
+                
+                //DEAD
+                GameEventManager.Instance.onPlayerDied?.Invoke();
+                
                 break;
             case StateStage.Exit:
-                stage = StateStage.Enter;
                 break;
         }
     }
 
     void Radio_Location()
     {
-        
+        switch (stage)
+        {
+            case StateStage.Enter:
+                SetDangerTimer();
+                break;
+            case StateStage.Update:
+                //if Timer is done => You Dead
+                if (!isTimerDone)
+                    return;
+                
+                if (state != CatState.InPetMode)
+                    return;
+                
+                //DEAD
+                GameEventManager.Instance.onPlayerDied?.Invoke();
+                
+                break;
+            case StateStage.Exit:
+                break;
+        }
     }
 
     void SelfDestructButton_Location()
     {
-        
+        switch (stage)
+        {
+            case StateStage.Enter:
+                SetDangerTimer();
+                break;
+            case StateStage.Update:
+                //if Timer is done => You Dead
+                if (!isTimerDone)
+                    return;
+                
+                if (state != CatState.InPetMode)
+                    return;
+                
+                //DEAD
+                GameEventManager.Instance.onPlayerDied?.Invoke();
+                
+                break;
+            case StateStage.Exit:
+                break;
+        }
     }
 
     void SetDangerTimer()
@@ -217,7 +262,9 @@ public class CatBehavior : MonoBehaviour
                 break;
             case CatState.Pleased:
                 nextLocation = CatLocation.Nothing;
+                state = CatState.Unpetted;
                 stage = StateStage.Exit;
+                ProcessStage();
                 break;
             case CatState.Overpetted:
                 //YOU DIED
@@ -230,11 +277,14 @@ public class CatBehavior : MonoBehaviour
 
     void ProcessAction_CatInteraction(double value)
     {
+        
         CatState newCatState = 
-            (value < underpettedLimit)? CatState.Unpetted : 
+            (value < underpettedLimit)? CatState.UnderPetted : 
             (value > overpettedLimit) ? CatState.Overpetted : CatState.Pleased;
         _catScript.onCatStateChange?.Invoke(newCatState);
         GameEventManager.Instance.onCatReaction?.Invoke(newCatState);
+        
+        Debug.Log("CAT INTERACTION WEWO: " + newCatState);
     }
 
     #endregion
