@@ -197,15 +197,13 @@ public class PlayerBehaviour : MonoBehaviour
                     float mouse_y_dif = _mouseY - _lastMouseY;
                     double distance = Math.Sqrt(Math.Pow((double)mouse_x_dif, 2) + Math.Pow((double)mouse_y_dif, 2));
 
-                    catMeter += distance * 1.4 * Time.deltaTime;
+                    catMeter = (catMeter < 1.0 ? catMeter + distance * 1.4 * Time.deltaTime : 1.0);
                 }
-
-                // Hier können Sie weitere Aktionen ausführen, wie z.B. eine Reaktion des Objekts
             }
         }
         else
         {
-            catMeter -= 0.01 * Time.deltaTime;
+            catMeter = (catMeter > 0.0 ? catMeter - 0.01 * Time.deltaTime: 0.0);
         }
 
         Debug.Log("Cat-Meter: " + catMeter);
