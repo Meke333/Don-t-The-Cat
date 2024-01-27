@@ -114,7 +114,7 @@ public class PlayerBehaviour : MonoBehaviour
         Die();
 
 
-        if (inCatLocation && Input.GetKeyDown(KeyCode.Q)) //in triggerbox and pressed q -> go into petting mode
+        if (state != PlayerState.Petting && inCatLocation && Input.GetKeyDown(KeyCode.Q)) //in triggerbox and pressed q -> go into petting mode
         {
             _playerScript.onPlayerStateChange.Invoke(PlayerState.Petting);
             setTriggerText(true, "press E");
@@ -127,7 +127,7 @@ public class PlayerBehaviour : MonoBehaviour
                 catPettingTimer.RunTimer();
                 _isCatPetTimerActive = true;
             }
-        } else if(inWorkLocation && Input.GetKeyDown(KeyCode.Q)) //in triggerbox and pressed q -> go into working mode
+        } else if(state != PlayerState.Working && inWorkLocation && Input.GetKeyDown(KeyCode.Q)) //in triggerbox and pressed q -> go into working mode
         {
             _playerScript.onPlayerStateChange.Invoke(PlayerState.Working);
             setTriggerText(true, "press E");
@@ -182,6 +182,9 @@ public class PlayerBehaviour : MonoBehaviour
     {
         if (state != PlayerState.Working)
             return;
+        
+        //Stop walking
+        cameraAnimator.SetBool("IsWalking", false);
 
         cube2Material.color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
         cube1Material.color = new Color(0, 0, 1);
@@ -191,6 +194,9 @@ public class PlayerBehaviour : MonoBehaviour
     {
         if (state != PlayerState.Petting)
             return;
+        
+        //Stop walking
+        cameraAnimator.SetBool("IsWalking", false);
 
         cube1Material.color = new Color(1 - (float)catMeter, (float)catMeter, 0);
         cube2Material.color = new Color(0, 0, 1);
@@ -209,7 +215,7 @@ public class PlayerBehaviour : MonoBehaviour
             {
                 // Hit-Informationen nutzen
                 GameObject targetObject = hit.collider.gameObject;
-                Debug.Log("Detected object: " + targetObject.name);
+                //Debug.Log("Detected object: " + targetObject.name);
                 if (targetObject.CompareTag("cat"))
                 {
                     float mouse_x_dif = _mouseX - _lastMouseX;
@@ -232,6 +238,9 @@ public class PlayerBehaviour : MonoBehaviour
     {
         if (state != PlayerState.LookAtDisaster)
             return;
+        
+        //Stop walking
+        cameraAnimator.SetBool("IsWalking", false);
 
         //Look at falling object
         //CameraPosition.LookAt(CatPosition);
@@ -241,6 +250,9 @@ public class PlayerBehaviour : MonoBehaviour
     {
         if (state != PlayerState.Die)
             return;
+
+        //Stop walking
+        cameraAnimator.SetBool("IsWalking", false);
 
         //Look at cat
         CameraPosition.LookAt(CatPosition);
