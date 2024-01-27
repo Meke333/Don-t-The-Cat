@@ -118,7 +118,7 @@ public class CatBehavior : MonoBehaviour
 
                 int randomLocation = Random.Range(1, Enum.GetNames(typeof(CatLocation)).Length);
                 nextLocation = (CatLocation)randomLocation;
-                
+
                 stage = StateStage.Exit;
                 
                 break;
@@ -216,6 +216,7 @@ public class CatBehavior : MonoBehaviour
                 _timer.InterruptTimer();
                 break;
             case CatState.Pleased:
+                nextLocation = CatLocation.Nothing;
                 stage = StateStage.Exit;
                 break;
             case CatState.Overpetted:
