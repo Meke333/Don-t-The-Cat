@@ -14,11 +14,12 @@ public class MenuHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        AudioHandler.Instance.PlaySound(Clip.Cricket, true);
     }
 
     public void onPlayButtonClick()
     {
+        AudioHandler.Instance.StopSound();
         SceneManager.LoadScene("DATLEVEL");
     }
 }

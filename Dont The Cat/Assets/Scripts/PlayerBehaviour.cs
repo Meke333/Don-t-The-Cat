@@ -16,7 +16,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     public float playerSpeed;
     
-    public float _xInput, _yInput; //vertical and horizontal movement tracker [-1, 0, 1]
+    public float horizontalInput, verticalInput; //vertical and horizontal movement tracker [-1, 0, 1]
 
     public Vector3 directionForward, directionRight; //direction vector for foward and sideward
 
@@ -39,7 +39,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     //public TextMeshProUGUI triggerText; //for entering and leaving cat-/work-mode
     public Image triggerIcon;
-    public Sprite q_key_icon, e_key_icon;
+    public Sprite q_key_icon, e_key_icon, mousewiggle_key_icon;
 
     public Transform CatPosition;
 
@@ -65,6 +65,7 @@ public class PlayerBehaviour : MonoBehaviour
         catPettingTimer.onTimerDone += ProcessAction_CatTimerDone;
         await Task.Yield();
         GameEventManager.Instance.onCatLocationSet += ProcessAction_OnCatLocationSet;
+        GameEventManager.Instance.onCatReaction += ProcessAction_onCatReaction;
     }
 
     private void OnDisable()
@@ -72,12 +73,13 @@ public class PlayerBehaviour : MonoBehaviour
         _playerScript.onPlayerStateChange -= ProcessAction_OnPlayerStateChange;
         catPettingTimer.onTimerDone -= ProcessAction_CatTimerDone;
         GameEventManager.Instance.onCatLocationSet -= ProcessAction_OnCatLocationSet;
+        GameEventManager.Instance.onCatReaction -= ProcessAction_onCatReaction;
     }
 
     private void setTriggerKeyIcon(bool visible, int key) //key -> 0:Q, 1:E
     {
         triggerIcon.gameObject.SetActive(visible);
-        triggerIcon.sprite = (key == 0 ? q_key_icon : e_key_icon);
+        triggerIcon.sprite = (key == 0 ? q_key_icon : (key == 1 ? e_key_icon : mousewiggle_key_icon));
     }
 
     private void OnTriggerEnter(Collider other)
@@ -132,11 +134,11 @@ public class PlayerBehaviour : MonoBehaviour
             case "cat_location_urne":
             case "cat_location_radio":
             case "cat_location_selfdestruct_button":
-                setTriggerKeyIcon(false, 0); //show nothing
+                setTriggerKeyIcon(false, 0); //hide
                 inCatLocation = false;
                 break;
             case "work_location":
-                setTriggerKeyIcon(false, 0); //show nothing
+                setTriggerKeyIcon(false, 0); //hide
                 inWorkLocation = false;
                 break;
         }
@@ -154,10 +156,10 @@ public class PlayerBehaviour : MonoBehaviour
         Die();
 
 
-        if (state != PlayerState.Petting && inCatLocation && Input.GetKeyDown(KeyCode.Q)) //in triggerbox and pressed q -> go into petting mode
+        if (state != PlayerState.Petting && inCatLocation && Input.GetKeyDown(KeyCode.Q)) //in pet-triggerbox and pressed q -> go into petting mode
         {
             _playerScript.onPlayerStateChange.Invoke(PlayerState.Petting);
-            setTriggerKeyIcon(true, 1); //show E
+            setTriggerKeyIcon(true, 2); //show Mousewiggle
 
             //Look at cat
             CameraPosition.LookAt(CatPosition); 
@@ -167,11 +169,11 @@ public class PlayerBehaviour : MonoBehaviour
                 catPettingTimer.RunTimer();
                 _isCatPetTimerActive = true;
             }
-        } else if(state != PlayerState.Working && inWorkLocation && Input.GetKeyDown(KeyCode.Q)) //in triggerbox and pressed q -> go into working mode
+        } else if(state != PlayerState.Working && inWorkLocation && Input.GetKeyDown(KeyCode.Q)) //in work-triggerbox and pressed q -> go into working mode
         {
             _playerScript.onPlayerStateChange.Invoke(PlayerState.Working);
             setTriggerKeyIcon(true, 1); //show E
-        } else if((inCatLocation || inWorkLocation) && Input.GetKeyDown(KeyCode.E)) //in triggerbox and pressed e -> go into walking mode
+        } else if(inWorkLocation && Input.GetKeyDown(KeyCode.E)) //in work-triggerbox and pressed e -> go into walking mode
         {
             _playerScript.onPlayerStateChange.Invoke(PlayerState.Walking);
             setTriggerKeyIcon(true, 0); //show Q
@@ -180,8 +182,8 @@ public class PlayerBehaviour : MonoBehaviour
 
     void GetInput()
     {
-        _xInput = Input.GetAxisRaw("Horizontal");
-        _yInput = Input.GetAxisRaw("Vertical");
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
 
         _lastMouseX = _mouseX;
         _lastMouseY = _mouseY;
@@ -209,10 +211,10 @@ public class PlayerBehaviour : MonoBehaviour
         directionRight.y = 0;
 
         //Move Player in direction of sight
-        CharacterController.Move(Time.deltaTime * playerSpeed * ((_yInput * directionForward) + (_xInput * directionRight)));
+        CharacterController.Move(Time.deltaTime * playerSpeed * ((verticalInput * directionForward) + (horizontalInput * directionRight)));
 
         //Camera up and down movement
-        if (_xInput != 0 || _yInput != 0)
+        if (horizontalInput != 0 || verticalInput != 0)
             cameraAnimator.SetBool("IsWalking", true);
         else
             cameraAnimator.SetBool("IsWalking", false);
@@ -327,6 +329,15 @@ public class PlayerBehaviour : MonoBehaviour
     {
         _isCatPetTimerActive = false;
         GameEventManager.Instance.onCatInteraction?.Invoke(catMeter);
+    }
+
+    void ProcessAction_onCatReaction(CatState state)
+    {
+        if(state == CatState.Pleased)
+        {
+            _playerScript.onPlayerStateChange.Invoke(PlayerState.Walking);
+            setTriggerKeyIcon(false, 0); //hide
+        }
     }
 
     void ProcessAction_OnCatLocationSet(CatLocation location)
