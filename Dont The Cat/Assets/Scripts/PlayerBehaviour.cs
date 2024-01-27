@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using UnityEngine.SceneManagement;
 
 public class PlayerBehaviour : MonoBehaviour
 {
@@ -35,7 +37,9 @@ public class PlayerBehaviour : MonoBehaviour
     public Material cube1Material; //for DEBUG purposes
     public Material cube2Material; //for DEBUG purposes
 
-    public TextMeshProUGUI triggerText; //for entering and leaving cat-/work-mode
+    //public TextMeshProUGUI triggerText; //for entering and leaving cat-/work-mode
+    public Image triggerIcon;
+    public Sprite q_key_icon, e_key_icon;
 
     public Transform CatPosition;
 
@@ -51,7 +55,7 @@ public class PlayerBehaviour : MonoBehaviour
     private void Awake()
     {
         _playerScript = GetComponent<PlayerScript>();
-        triggerText.gameObject.SetActive(false);
+        triggerIcon.gameObject.SetActive(false);
         catPettingTimer.SetTimer(catPettingTime);
     }
 
@@ -70,10 +74,10 @@ public class PlayerBehaviour : MonoBehaviour
         GameEventManager.Instance.onCatLocationSet -= ProcessAction_OnCatLocationSet;
     }
 
-    private void setTriggerText(bool visible, String content)
+    private void setTriggerKeyIcon(bool visible, int key) //key -> 0:Q, 1:E
     {
-        triggerText.gameObject.SetActive(visible);
-        triggerText.text = content;
+        triggerIcon.gameObject.SetActive(visible);
+        triggerIcon.sprite = (key == 0 ? q_key_icon : e_key_icon);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -83,7 +87,7 @@ public class PlayerBehaviour : MonoBehaviour
             case "cat_location_vase":
                 if (cat_location == CatLocation.Vase)
                 {
-                    setTriggerText(true, "press Q");
+                    setTriggerKeyIcon(true, 0); //show Q
                     inCatLocation = true;
                     inWorkLocation = false;
                 }
@@ -91,7 +95,7 @@ public class PlayerBehaviour : MonoBehaviour
             case "cat_location_urne":
                 if (cat_location == CatLocation.Urne)
                 {
-                    setTriggerText(true, "press Q");
+                    setTriggerKeyIcon(true, 0); //show Q
                     inCatLocation = true;
                     inWorkLocation = false;
                 }
@@ -99,7 +103,7 @@ public class PlayerBehaviour : MonoBehaviour
             case "cat_location_radio":
                 if (cat_location == CatLocation.Radio)
                 {
-                    setTriggerText(true, "press Q");
+                    setTriggerKeyIcon(true, 0); //show Q
                     inCatLocation = true;
                     inWorkLocation = false;
                 }
@@ -107,13 +111,13 @@ public class PlayerBehaviour : MonoBehaviour
             case "cat_location_selfdestruct_button":
                 if (cat_location == CatLocation.SelfDestructButton)
                 {
-                    setTriggerText(true, "press Q");
+                    setTriggerKeyIcon(true, 0); //show Q
                     inCatLocation = true;
                     inWorkLocation = false;
                 }
                 break;
             case "work_location":
-                setTriggerText(true, "press Q");
+                setTriggerKeyIcon(true, 0); //show Q
                 inWorkLocation = true;
                 inCatLocation = false;
                 break;
@@ -128,11 +132,11 @@ public class PlayerBehaviour : MonoBehaviour
             case "cat_location_urne":
             case "cat_location_radio":
             case "cat_location_selfdestruct_button":
-                setTriggerText(false, "");
+                setTriggerKeyIcon(false, 0); //show nothing
                 inCatLocation = false;
                 break;
             case "work_location":
-                setTriggerText(false, "");
+                setTriggerKeyIcon(false, 0); //show nothing
                 inWorkLocation = false;
                 break;
         }
@@ -153,7 +157,7 @@ public class PlayerBehaviour : MonoBehaviour
         if (state != PlayerState.Petting && inCatLocation && Input.GetKeyDown(KeyCode.Q)) //in triggerbox and pressed q -> go into petting mode
         {
             _playerScript.onPlayerStateChange.Invoke(PlayerState.Petting);
-            setTriggerText(true, "press E");
+            setTriggerKeyIcon(true, 1); //show E
 
             //Look at cat
             CameraPosition.LookAt(CatPosition); 
@@ -166,11 +170,11 @@ public class PlayerBehaviour : MonoBehaviour
         } else if(state != PlayerState.Working && inWorkLocation && Input.GetKeyDown(KeyCode.Q)) //in triggerbox and pressed q -> go into working mode
         {
             _playerScript.onPlayerStateChange.Invoke(PlayerState.Working);
-            setTriggerText(true, "press E");
+            setTriggerKeyIcon(true, 1); //show E
         } else if((inCatLocation || inWorkLocation) && Input.GetKeyDown(KeyCode.E)) //in triggerbox and pressed e -> go into walking mode
         {
             _playerScript.onPlayerStateChange.Invoke(PlayerState.Walking);
-            setTriggerText(true, "press Q");
+            setTriggerKeyIcon(true, 0); //show Q
         }
     }
 
@@ -278,8 +282,9 @@ public class PlayerBehaviour : MonoBehaviour
         //Stop walking
         cameraAnimator.SetBool("IsWalking", false);
 
-        //Look at falling object
-        //CameraPosition.LookAt(CatPosition);
+        //Move backwards a bit
+
+        //look at disaster -> CameraPosition.LookAt(object);
     }
 
     void Die()
@@ -292,6 +297,8 @@ public class PlayerBehaviour : MonoBehaviour
 
         //Look at cat
         CameraPosition.LookAt(CatPosition);
+
+        //SceneManager.LoadScene("MENU");
     }
 
     void Looking()
