@@ -6,6 +6,8 @@ TagManager:
   tags:
   - cat_location_1
   - work_location
+  - cat
+  - work
   layers:
   - Default
   - TransparentFX
