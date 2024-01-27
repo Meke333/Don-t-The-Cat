@@ -128,6 +128,55 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 648567783408584197, guid: 71dee21b628ebe9449aebb05d8795f41, type: 3}
   m_PrefabInstance: {fileID: 388852465}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &116322799
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 116322801}
+  - component: {fileID: 116322800}
+  m_Layer: 0
+  m_Name: AudioHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &116322800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 116322799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a1efb4414b05b24b9f0885c7c7de896, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clips:
+  - {fileID: 8300000, guid: 0dbac6f89a4820a4ba53347c44d32b65, type: 3}
+  - {fileID: 8300000, guid: 9fc04bdbd4c57574c828573ca137e60b, type: 3}
+  - {fileID: 8300000, guid: 5b9b3342474f7e84c8acaf72d0898fca, type: 3}
+  - {fileID: 8300000, guid: 7b98cac12c88dc44492ddcdea257e5fa, type: 3}
+--- !u!4 &116322801
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 116322799}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 447, y: 251.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &148848912
 GameObject:
   m_ObjectHideFlags: 0
@@ -1925,8 +1974,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   state: 0
   playerSpeed: 10
-  _xInput: 0
-  _yInput: 0
+  horizontalInput: 0
+  verticalInput: 0
   directionForward: {x: 0, y: 0, z: 0}
   directionRight: {x: 0, y: 0, z: 0}
   mouseSensitivity: {x: 1000, y: 500}
@@ -1935,7 +1984,6 @@ MonoBehaviour:
   _mouseY: 0
   _lastMouseX: 0
   _lastMouseY: 0
-  catMeterSensitivity: 0
   CharacterController: {fileID: 1840165756}
   CameraPosition: {fileID: 963194228}
   cameraAnimator: {fileID: 963194229}
@@ -1944,6 +1992,7 @@ MonoBehaviour:
   triggerIcon: {fileID: 1633541749}
   q_key_icon: {fileID: 21300000, guid: 4d284c95eef9a4246bd4414129983149, type: 3}
   e_key_icon: {fileID: 21300000, guid: 5bbfed45316931441bca5c531f24c960, type: 3}
+  mousewiggle_key_icon: {fileID: 21300000, guid: e00f8ada3f97cc84dbc59c70d48885c0, type: 3}
   CatPosition: {fileID: 2085374533}
   cat_location: 0
   catPettingTime: 3000
@@ -2335,6 +2384,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 2073895433}
+  - {fileID: 116322801}
   - {fileID: 705507995}
   - {fileID: 2100883599}
   - {fileID: 1840165755}
