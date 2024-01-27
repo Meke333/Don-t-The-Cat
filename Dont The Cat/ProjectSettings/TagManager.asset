@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - cat_location_1
+  - work_location
   layers:
   - Default
   - TransparentFX
