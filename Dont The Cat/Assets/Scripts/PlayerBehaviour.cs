@@ -36,6 +36,8 @@ public class PlayerBehaviour : MonoBehaviour
 
     public TextMeshProUGUI triggerText; //for entering and leaving cat-/work-mode
 
+    public Transform CatPosition;
+
     private bool inCatLocation = false;
     private bool inWorkLocation = false;
 
@@ -108,11 +110,18 @@ public class PlayerBehaviour : MonoBehaviour
         Walking();
         Working();
         Petting();
+        LookAtDisaster();
+        Die();
+
 
         if (inCatLocation && Input.GetKeyDown(KeyCode.Q)) //in triggerbox and pressed q -> go into petting mode
         {
             _playerScript.onPlayerStateChange.Invoke(PlayerState.Petting);
             setTriggerText(true, "press E");
+
+            //Look at cat
+            CameraPosition.LookAt(CatPosition); 
+
             if (!_isCatPetTimerActive)
             { 
                 catPettingTimer.RunTimer();
@@ -183,8 +192,6 @@ public class PlayerBehaviour : MonoBehaviour
         if (state != PlayerState.Petting)
             return;
 
-        Looking();
-
         cube1Material.color = new Color(1 - (float)catMeter, (float)catMeter, 0);
         cube2Material.color = new Color(0, 0, 1);
 
@@ -218,7 +225,25 @@ public class PlayerBehaviour : MonoBehaviour
             catMeter = (catMeter > 0.0 ? catMeter - 0.01 * Time.deltaTime: 0.0);
         }
 
-        Debug.Log("Cat-Meter: " + catMeter);
+        //Debug.Log("Cat-Meter: " + catMeter);
+    }
+
+    void LookAtDisaster()
+    {
+        if (state != PlayerState.LookAtDisaster)
+            return;
+
+        //Look at falling object
+        //CameraPosition.LookAt(CatPosition);
+    }
+
+    void Die()
+    {
+        if (state != PlayerState.Die)
+            return;
+
+        //Look at cat
+        CameraPosition.LookAt(CatPosition);
     }
 
     void Looking()
@@ -246,7 +271,7 @@ public class PlayerBehaviour : MonoBehaviour
     void ProcessAction_CatTimerDone()
     {
         _isCatPetTimerActive = false;
-        GameEventManager.Instance.onCatInteraction.Invoke(catMeter);
+        GameEventManager.Instance.onCatInteraction?.Invoke(catMeter);
     }
 
     #endregion
