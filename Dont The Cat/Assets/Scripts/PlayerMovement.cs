@@ -11,18 +11,15 @@ public class PlayerMovement : MonoBehaviour
 
     public float playerSpeed;
     
-    public float _xInput;
-    public float _yInput;
+    public float _xInput, _yInput; //vertical and horizontal movement tracker [-1, 0, 1]
 
-    public Vector3 directionForward;
-    public Vector3 directionRight;
+    public Vector3 directionForward, directionRight; //direction vector for foward and sideward
 
-    public Vector2 mouseSensitivity;
-    public float clampValuesXRotation;
+    public Vector2 mouseSensitivity; //sensitivity for rotation movement
+    public float clampValuesXRotation; //min/max value for the x-rotation (up and down)
     
-    public float _mouseX;
-    public float _mouseY;
-    private float xRotation, yRotation;
+    public float _mouseX, _mouseY; //mouse position
+    private float xRotation, yRotation; //rotation of the player based on the mouse
 
     public CharacterController CharacterController;
 
