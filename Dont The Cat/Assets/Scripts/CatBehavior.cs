@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -35,10 +36,11 @@ public class CatBehavior : MonoBehaviour
         _catScript = GetComponent<CatScript>();
     }
 
-    private void OnEnable()
+    async private void OnEnable()
     {
         _timer.onTimerDone += ProcessAction_TimerDone;
         _catScript.onCatStateChange += ProcessAction_CatStateChange;
+        await Task.Yield();
         GameEventManager.Instance.onCatInteraction += ProcessAction_CatInteraction;
     }
 
@@ -93,6 +95,7 @@ public class CatBehavior : MonoBehaviour
                 break;
             case StateStage.Exit:
                 location = nextLocation;
+                GameEventManager.Instance.onCatLocationSet?.Invoke(location);
                 break;
         }
     }
@@ -115,7 +118,7 @@ public class CatBehavior : MonoBehaviour
 
                 int randomLocation = Random.Range(1, Enum.GetNames(typeof(CatLocation)).Length);
                 nextLocation = (CatLocation)randomLocation;
-                
+
                 stage = StateStage.Exit;
                 
                 break;
@@ -213,6 +216,7 @@ public class CatBehavior : MonoBehaviour
                 _timer.InterruptTimer();
                 break;
             case CatState.Pleased:
+                nextLocation = CatLocation.Nothing;
                 stage = StateStage.Exit;
                 break;
             case CatState.Overpetted:
