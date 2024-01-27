@@ -64,9 +64,11 @@ MonoBehaviour:
   nextState: 0
   stage: 0
   isTimerDone: 0
-  reactionTime: 500
-  catMinNothingTime: 250
-  catMaxNothingTime: 1100
+  reactionTime: 5000
+  catMinNothingTime: 2500
+  catMaxNothingTime: 7500
+  underpettedLimit: 0.44999998807907104
+  overpettedLimit: 0.800000011920929
 --- !u!1 &8951176702700861310
 GameObject:
   m_ObjectHideFlags: 0
