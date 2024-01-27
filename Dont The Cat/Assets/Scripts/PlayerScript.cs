@@ -25,4 +25,6 @@ public enum PlayerState
     Walking,
     Petting,
     Working,
+    LookAtDisaster,
+    Die
 }
