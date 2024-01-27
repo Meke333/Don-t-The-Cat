@@ -1027,7 +1027,7 @@ MonoBehaviour:
   cube2Material: {fileID: 2100000, guid: dde6520fe69310146b277a61e82acf80, type: 2}
   triggerText: {fileID: 758212215}
   CatPosition: {fileID: 2085374533}
-  catPettingTime: 0
+  catPettingTime: 3000
 --- !u!136 &1840165752
 CapsuleCollider:
   m_ObjectHideFlags: 0
