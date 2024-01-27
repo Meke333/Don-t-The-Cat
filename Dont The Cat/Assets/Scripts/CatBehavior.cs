@@ -18,7 +18,9 @@ public class CatBehavior : MonoBehaviour
 
     private Timer _timer = new Timer();
     public bool isTimerDone;
-    
+
+    public bool isPleased;
+
     public int reactionTime;
     public int catMinNothingTime;
     public int catMaxNothingTime;
@@ -90,6 +92,7 @@ public class CatBehavior : MonoBehaviour
             case StateStage.Update:
                 break;
             case StateStage.Exit:
+                location = nextLocation;
                 break;
         }
     }
@@ -131,7 +134,15 @@ public class CatBehavior : MonoBehaviour
                 break;
             case StateStage.Update:
                 //if Timer is done => You Dead
-                //if 
+                if (!isTimerDone)
+                    return;
+                
+                if (state != CatState.InPetMode)
+                    return;
+                
+                //DEAD
+                GameEventManager.Instance.onPlayerDied?.Invoke();
+                
                 break;
             case StateStage.Exit:
                 stage = StateStage.Enter;
@@ -169,6 +180,8 @@ public class CatBehavior : MonoBehaviour
         _timer.SetTimer(reactionTime);
         isTimerDone = false;
         _timer.RunTimer();
+
+        nextLocation = CatLocation.Nothing;
     }
 
     void PlayerDied()
@@ -200,6 +213,7 @@ public class CatBehavior : MonoBehaviour
                 _timer.InterruptTimer();
                 break;
             case CatState.Pleased:
+                stage = StateStage.Exit;
                 break;
             case CatState.Overpetted:
                 //YOU DIED

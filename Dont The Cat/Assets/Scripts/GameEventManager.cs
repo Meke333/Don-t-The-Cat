@@ -11,6 +11,7 @@ public class GameEventManager : MonoBehaviour
 
     public Action onPlayerDied;
     public Action onWonGame;
+    public Action<CatLocation> onCatLocationSet;
     public Action<double> onCatInteraction;
     public Action<CatState> onCatReaction;
 
