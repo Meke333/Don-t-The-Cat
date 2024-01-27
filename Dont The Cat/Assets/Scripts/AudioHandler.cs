@@ -23,10 +23,11 @@ public class AudioHandler : MonoBehaviour
         source = gameObject.AddComponent<AudioSource>();
     }
 
-    public void PlaySound(Clip clip, bool loop)
+    public void PlayLoopSound(Clip clip, float volume = 1f)
     {
         source.clip = clips[(int)clip];
-        source.loop = loop;
+        source.loop = true;
+        source.volume = volume;
 
         if (source != null && !source.isPlaying)
         {
@@ -34,11 +35,23 @@ public class AudioHandler : MonoBehaviour
         }
     }
 
-    public void StopSound()
+    public void StopLoopSound()
     {
         if (source != null && source.isPlaying)
         {
             source.Stop();
         }
+    }
+
+    public void PlaySingleSound(Clip clip, float volume = 1f)
+    {
+        AudioClip currentClip = clips[(int)clip];
+
+        AudioSource audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.clip = currentClip;
+        audioSource.volume = volume;
+        audioSource.Play();
+
+        Destroy(audioSource, currentClip.length); // Zerstört das AudioSource-Objekt, nachdem der Clip abgespielt wurde
     }
 }
