@@ -8,13 +8,13 @@ public class MenuHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        AudioHandler.Instance.PlaySound(Clip.Cricket, true);
     }
 
     // Update is called once per frame
     void Update()
     {
-        AudioHandler.Instance.PlaySound(Clip.Cricket, true);
+        
     }
 
     public void onPlayButtonClick()
