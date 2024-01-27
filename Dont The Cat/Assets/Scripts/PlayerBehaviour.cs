@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using UnityEngine.SceneManagement;
@@ -15,6 +16,7 @@ public class PlayerBehaviour : MonoBehaviour
     public PlayerState state;
 
     public float playerSpeed;
+    public float gravity = 9.81f;
     
     public float horizontalInput, verticalInput; //vertical and horizontal movement tracker [-1, 0, 1]
 
@@ -157,6 +159,7 @@ public class PlayerBehaviour : MonoBehaviour
         GetInput();
 
         Walking();
+        Gravity();
         Working();
         Petting();
         LookAtDisaster();
@@ -210,8 +213,9 @@ public class PlayerBehaviour : MonoBehaviour
         cube2Material.color = new Color(0, 0, 1);
 
         //forward direction of camera
+
         directionForward = CameraPosition.forward;
-        directionForward.y = -0.1f;
+        directionForward.y = 0;
 
         //sideward direction of camera
         directionRight = CameraPosition.right;
@@ -227,6 +231,11 @@ public class PlayerBehaviour : MonoBehaviour
             cameraAnimator.SetBool("IsWalking", false);
     }
 
+    void Gravity()
+    {
+        CharacterController.Move( Time.deltaTime * gravity * Vector3.down);
+    }
+    
     void Working()
     {
         if (state != PlayerState.Working)
