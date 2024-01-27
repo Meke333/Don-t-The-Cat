@@ -26,6 +26,7 @@ public class PlayerBehaviour : MonoBehaviour
     private float xRotation, yRotation; //rotation of the player based on the mouse
 
     private double catMeter;
+    public double catMeterSensitivity;
 
     public CharacterController CharacterController; //for moving around
     public Transform CameraPosition; //for looking around
@@ -153,6 +154,7 @@ public class PlayerBehaviour : MonoBehaviour
         if (state != PlayerState.Petting && inCatLocation && Input.GetKeyDown(KeyCode.Q)) //in triggerbox and pressed q -> go into petting mode
         {
             _playerScript.onPlayerStateChange.Invoke(PlayerState.Petting);
+            GameEventManager.Instance.onCatInPetState?.Invoke();
             setTriggerText(true, "press E");
 
             //Look at cat
@@ -257,8 +259,11 @@ public class PlayerBehaviour : MonoBehaviour
                     float mouse_x_dif = _mouseX - _lastMouseX;
                     float mouse_y_dif = _mouseY - _lastMouseY;
                     double distance = Math.Sqrt(Math.Pow((double)mouse_x_dif, 2) + Math.Pow((double)mouse_y_dif, 2));
+                    
+                    if (distance > 0)
+                        GameEventManager.Instance.onCatGettingPet?.Invoke();
 
-                    catMeter = (catMeter < 1.0 ? catMeter + distance * 1.4 * Time.deltaTime : 1.0);
+                    catMeter = (catMeter < 1.0 ? catMeter + distance * catMeterSensitivity * Time.deltaTime : 1.0);
                 }
             }
         }
