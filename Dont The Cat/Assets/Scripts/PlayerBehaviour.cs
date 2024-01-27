@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using UnityEngine.UI;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerBehaviour : MonoBehaviour
 {
     private PlayerScript _playerScript;
     
@@ -22,17 +21,20 @@ public class PlayerMovement : MonoBehaviour
     public float clampValuesXRotation; //min/max value for the x-rotation (up and down)
     
     public float _mouseX, _mouseY; //mouse position
+    public float _lastMouseX, _lastMouseY; //last mouse position
     private float xRotation, yRotation; //rotation of the player based on the mouse
 
-    public CharacterController CharacterController;
-    public Transform CameraPosition;
+    private double catMeter;
 
-    public Animator cameraAnimator;
+    public CharacterController CharacterController; //for moving around
+    public Transform CameraPosition; //for looking around
 
-    public Material cube1Material;
-    public Material cube2Material;
+    public Animator cameraAnimator; //for idle and walk animation (going down and up)
 
-    public TextMeshProUGUI triggerText;
+    public Material cube1Material; //for DEBUG purposes
+    public Material cube2Material; //for DEBUG purposes
+
+    public TextMeshProUGUI triggerText; //for entering and leaving cat-/work-mode
 
     private bool inCatLocation = false;
     private bool inWorkLocation = false;
@@ -59,7 +61,6 @@ public class PlayerMovement : MonoBehaviour
         triggerText.text = content;
     }
 
-    //Upon collision with another GameObject, this GameObject will reverse direction
     private void OnTriggerEnter(Collider other)
     {
         switch(other.gameObject.tag)
@@ -121,6 +122,8 @@ public class PlayerMovement : MonoBehaviour
         _xInput = Input.GetAxisRaw("Horizontal");
         _yInput = Input.GetAxisRaw("Vertical");
 
+        _lastMouseX = _mouseX;
+        _lastMouseY = _mouseY;
         _mouseX = Input.GetAxisRaw("Mouse X");
         _mouseY = Input.GetAxisRaw("Mouse Y");
 
@@ -172,6 +175,40 @@ public class PlayerMovement : MonoBehaviour
 
         cube1Material.color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
         cube2Material.color = new Color(0, 0, 1);
+
+        // Überprüft, ob die linke Maustaste gedrückt wird
+        if (Input.GetMouseButton(0))
+        {
+            // Wandelt die Mausposition in einen Ray um
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            // Struktur, um Informationen über den Raycast zu speichern
+            RaycastHit hit;
+
+            // Führt den Raycast aus
+            if (Physics.Raycast(ray, out hit))
+            {
+                // Hit-Informationen nutzen
+                GameObject targetObject = hit.collider.gameObject;
+                Debug.Log("Detected object: " + targetObject.name);
+                if (targetObject.CompareTag("cat"))
+                {
+                    float mouse_x_dif = _mouseX - _lastMouseX;
+                    float mouse_y_dif = _mouseY - _lastMouseY;
+                    double distance = Math.Sqrt(Math.Pow((double)mouse_x_dif, 2) + Math.Pow((double)mouse_y_dif, 2));
+
+                    catMeter += distance * 1.4 * Time.deltaTime;
+                }
+
+                // Hier können Sie weitere Aktionen ausführen, wie z.B. eine Reaktion des Objekts
+            }
+        }
+        else
+        {
+            catMeter -= 0.01 * Time.deltaTime;
+        }
+
+        Debug.Log("Cat-Meter: " + catMeter);
     }
 
     void Looking()
