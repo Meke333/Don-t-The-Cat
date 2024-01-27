@@ -23,7 +23,9 @@ public class CatBehavior : MonoBehaviour
     public int catMinNothingTime;
     public int catMaxNothingTime;
 
+    [Range(0,1)]
     public double underpettedLimit;
+    [Range(0,1)]
     public double overpettedLimit;
 
     private void Awake()
@@ -35,12 +37,14 @@ public class CatBehavior : MonoBehaviour
     {
         _timer.onTimerDone += ProcessAction_TimerDone;
         _catScript.onCatStateChange += ProcessAction_CatStateChange;
-        GameEventManager.Instance.onCatInteraction += ;
+        GameEventManager.Instance.onCatInteraction += ProcessAction_CatInteraction;
     }
 
     private void OnDisable()
     {
         _timer.onTimerDone -= ProcessAction_TimerDone;
+        _catScript.onCatStateChange -= ProcessAction_CatStateChange;
+        GameEventManager.Instance.onCatInteraction -= ProcessAction_CatInteraction;
     }
 
     private void Update()
@@ -198,9 +202,10 @@ public class CatBehavior : MonoBehaviour
             case CatState.Pleased:
                 break;
             case CatState.Overpetted:
-                
+                //YOU DIED
                 break;
             case CatState.UnderPetted:
+                //YOU DIED
                 break;
         }
     }
@@ -210,7 +215,8 @@ public class CatBehavior : MonoBehaviour
         CatState newCatState = 
             (value < underpettedLimit)? CatState.Unpetted : 
             (value > overpettedLimit) ? CatState.Overpetted : CatState.Pleased;
-        _catScript.onCatStateChange.Invoke(newCatState);
+        _catScript.onCatStateChange?.Invoke(newCatState);
+        GameEventManager.Instance.onCatReaction?.Invoke(newCatState);
     }
 
     #endregion
