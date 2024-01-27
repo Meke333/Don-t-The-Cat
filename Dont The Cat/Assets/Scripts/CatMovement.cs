@@ -123,7 +123,7 @@ public class CatMovement : MonoBehaviour
         jumpCounter++;
         
 
-        await Task.Delay(1000);
+        await Task.Delay(2000);
         jumppls = false;
         _isTargetActive = false;
         

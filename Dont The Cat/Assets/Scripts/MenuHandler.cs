@@ -22,6 +22,6 @@ public class MenuHandler : MonoBehaviour
         AudioHandler.Instance.StopLoopSound();
 
         AudioHandler.Instance.PlaySingleSound(Clip.Bounce);
-        SceneManager.LoadScene("DATLEVEL");
+        SceneManager.LoadScene("Level Design");
     }
 }
