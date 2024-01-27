@@ -3,15 +3,22 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - work_location
+  - cat
+  - work
+  - cat_location_urne
+  - cat_location_vase
+  - cat_location_radio
+  - cat_location_selfdestruct_button
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - DestroyableByCat
   - Water
   - UI
-  - 
+  - Player
   - 
   - 
   - 
