@@ -6,25 +6,36 @@ using Random = UnityEngine.Random;
 
 public class CatBehavior : MonoBehaviour
 {
+    private CatScript _catScript;
+    
     public CatLocation location = CatLocation.Nothing;
     public CatLocation nextLocation;
     
-    public CatState state = CatState.Normal;
+    public CatState state = CatState.Unpetted;
     public CatState nextState;
     
     public StateStage stage = StateStage.Enter;
 
-    private Timer _timer;
+    private Timer _timer = new Timer();
     public bool isTimerDone;
     
     public int reactionTime;
     public int catMinNothingTime;
     public int catMaxNothingTime;
 
+    public double underpettedLimit;
+    public double overpettedLimit;
+
+    private void Awake()
+    {
+        _catScript = GetComponent<CatScript>();
+    }
 
     private void OnEnable()
     {
         _timer.onTimerDone += ProcessAction_TimerDone;
+        _catScript.onCatStateChange += ProcessAction_CatStateChange;
+        GameEventManager.Instance.onCatInteraction += ;
     }
 
     private void OnDisable()
@@ -102,6 +113,7 @@ public class CatBehavior : MonoBehaviour
                 
                 break;
             case StateStage.Exit:
+                stage = StateStage.Enter;
                 break;
         }
     }
@@ -118,14 +130,24 @@ public class CatBehavior : MonoBehaviour
                 //if 
                 break;
             case StateStage.Exit:
-                
+                stage = StateStage.Enter;
                 break;
         }
     }
 
     void Urne_Location()
     {
-        
+        switch (stage)
+        {
+            case StateStage.Enter:
+                SetDangerTimer();
+                break;
+            case StateStage.Update:
+                break;
+            case StateStage.Exit:
+                stage = StateStage.Enter;
+                break;
+        }
     }
 
     void Radio_Location()
@@ -145,6 +167,11 @@ public class CatBehavior : MonoBehaviour
         _timer.RunTimer();
     }
 
+    void PlayerDied()
+    {
+        
+    }
+
     #endregion
     
 
@@ -157,25 +184,38 @@ public class CatBehavior : MonoBehaviour
         isTimerDone = true;
     }
 
+    void ProcessAction_CatStateChange(CatState newState)
+    {
+        state = newState;
+
+        switch (state)
+        {
+            case CatState.Unpetted:
+                break;
+            case CatState.InPetMode:
+                _timer.InterruptTimer();
+                break;
+            case CatState.Pleased:
+                break;
+            case CatState.Overpetted:
+                
+                break;
+            case CatState.UnderPetted:
+                break;
+        }
+    }
+
+    void ProcessAction_CatInteraction(double value)
+    {
+        CatState newCatState = 
+            (value < underpettedLimit)? CatState.Unpetted : 
+            (value > overpettedLimit) ? CatState.Overpetted : CatState.Pleased;
+        _catScript.onCatStateChange.Invoke(newCatState);
+    }
+
     #endregion
 }
 
-public enum CatLocation
-{
-    Nothing,
-    Vase,
-    Urne,
-    Radio,
-    SelfDestructButton
-}
-
-public enum CatState
-{
-    Normal,
-    Unpetted,
-    Pleased,
-    Overpetted
-}
 
 public enum StateStage
 {
