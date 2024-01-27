@@ -14,6 +14,13 @@ public class CatMovement : MonoBehaviour
     public float jumpDurationInSeconds;
     
     public float speed;
+    public float gravity = 20;
+    public float jumpSpeed = 8;
+    public int jumpCounter = 0;
+
+    private bool jumppls;
+
+    public Vector3 moveDirection = Vector3.zero;
     
     [SerializeField] private CatLocation targetLocationEnum;
     public Vector3 targetPosition;
@@ -26,6 +33,7 @@ public class CatMovement : MonoBehaviour
     public Transform SelfDestructButtonPosition;
 
     public CharacterController characterController;
+    public Rigidbody rigidbody;
 
     public LayerMask layerMask;
 
@@ -38,11 +46,13 @@ public class CatMovement : MonoBehaviour
     {
         await Task.Yield();
         GameEventManager.Instance.onCatLocationSet += ProcessAction_OnCatLocationSet;
+        GameEventManager.Instance.onCatReaction += ProcessAction_OnCatReaction;
     }
 
     private void OnDisable()
     {
         GameEventManager.Instance.onCatLocationSet -= ProcessAction_OnCatLocationSet;
+        GameEventManager.Instance.onCatReaction -= ProcessAction_OnCatReaction;
     }
 
     private void Update()
@@ -50,11 +60,34 @@ public class CatMovement : MonoBehaviour
         if (!_isTargetActive)
             return;
 
-        characterController.Move( Time.deltaTime * speed * transform.forward);
+        //Vector3 nextPosition = (Time.deltaTime * speed * transform.forward) + transform.position;
+
+        if (characterController.isGrounded)
+        {
+            moveDirection = transform.forward * speed;
+            
+            if (jumppls)
+            {
+                moveDirection.y = jumpSpeed;
+                jumppls = false;
+            }
+        }
+        
+        
+        moveDirection.y -= gravity * Time.deltaTime;
+        
+
+        //rigidbody.MovePosition( nextPosition);
+        characterController.Move(Time.deltaTime * moveDirection);
+
+        gameObject.transform.LookAt(targetPosition);
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (jumpCounter > 0)
+            return;
+        
         switch (other.gameObject.tag)
         {
             case "cat_location_vase":
@@ -74,9 +107,7 @@ public class CatMovement : MonoBehaviour
                     return;
                 break;
         }
-        
-        _isTargetActive = false;
-        
+
         _catScript.onCatJump?.Invoke();
         
         //Activate Jump Sequence
@@ -87,17 +118,14 @@ public class CatMovement : MonoBehaviour
 
     async void JumpSequence()
     {
-        float currentTime = 0;
+        Debug.Log("JUMP");
+        jumppls = true;
+        jumpCounter++;
+        
 
-        while (currentTime < jumpDurationInSeconds)
-        {
-            float progressPercentage = currentTime/jumpDurationInSeconds;
-
-            characterController.Move((Vector3.up * progressPercentage) + (Time.deltaTime * jumpDistanceForward * Vector3.forward));
-            
-            currentTime += Time.deltaTime;
-            await Task.Yield();
-        }
+        await Task.Delay(1000);
+        jumppls = false;
+        _isTargetActive = false;
         
         _catScript.onCatLanded.Invoke();
         GameEventManager.Instance.onCatNearTheObject?.Invoke();
@@ -131,9 +159,16 @@ public class CatMovement : MonoBehaviour
                 
         }
         
+        targetPosition.y = 0;
         gameObject.transform.LookAt(targetPosition);
         _isTargetActive = true;
 
+    }
+
+    void ProcessAction_OnCatReaction(CatState state)
+    {
+        if (state == CatState.Pleased)
+            jumpCounter = 0;
     }
 
     #endregion

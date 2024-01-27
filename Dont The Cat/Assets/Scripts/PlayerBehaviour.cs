@@ -88,7 +88,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (!isCatPetAble)
+        if (!isCatPetAble || state == PlayerState.Petting)
             return;
         
         switch (other.gameObject.tag)
@@ -211,7 +211,7 @@ public class PlayerBehaviour : MonoBehaviour
 
         //forward direction of camera
         directionForward = CameraPosition.forward;
-        directionForward.y = 0;
+        directionForward.y = -0.1f;
 
         //sideward direction of camera
         directionRight = CameraPosition.right;
