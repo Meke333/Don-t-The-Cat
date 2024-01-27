@@ -16,7 +16,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     public float playerSpeed;
     
-    public float _xInput, _yInput; //vertical and horizontal movement tracker [-1, 0, 1]
+    public float horizontalInput, verticalInput; //vertical and horizontal movement tracker [-1, 0, 1]
 
     public Vector3 directionForward, directionRight; //direction vector for foward and sideward
 
@@ -182,8 +182,8 @@ public class PlayerBehaviour : MonoBehaviour
 
     void GetInput()
     {
-        _xInput = Input.GetAxisRaw("Horizontal");
-        _yInput = Input.GetAxisRaw("Vertical");
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
 
         _lastMouseX = _mouseX;
         _lastMouseY = _mouseY;
@@ -211,10 +211,10 @@ public class PlayerBehaviour : MonoBehaviour
         directionRight.y = 0;
 
         //Move Player in direction of sight
-        CharacterController.Move(Time.deltaTime * playerSpeed * ((_yInput * directionForward) + (_xInput * directionRight)));
+        CharacterController.Move(Time.deltaTime * playerSpeed * ((verticalInput * directionForward) + (horizontalInput * directionRight)));
 
         //Camera up and down movement
-        if (_xInput != 0 || _yInput != 0)
+        if (horizontalInput != 0 || verticalInput != 0)
             cameraAnimator.SetBool("IsWalking", true);
         else
             cameraAnimator.SetBool("IsWalking", false);
