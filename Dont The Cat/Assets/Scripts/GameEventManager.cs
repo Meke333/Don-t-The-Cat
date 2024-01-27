@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameEventManager : MonoBehaviour
 {
-    public GameEventManager Instance;
+    public static GameEventManager Instance;
 
     #region Events
 

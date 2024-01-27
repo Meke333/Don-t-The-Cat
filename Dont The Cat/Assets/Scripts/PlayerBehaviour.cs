@@ -39,20 +39,27 @@ public class PlayerBehaviour : MonoBehaviour
     private bool inCatLocation = false;
     private bool inWorkLocation = false;
 
+    private Timer catPettingTimer = new Timer();
+    public int catPettingTime;
+    bool _isCatPetTimerActive;
+
     private void Awake()
     {
         _playerScript = GetComponent<PlayerScript>();
         triggerText.gameObject.SetActive(false);
+        catPettingTimer.SetTimer(catPettingTime);
     }
 
     private void OnEnable()
     {
         _playerScript.onPlayerStateChange += ProcessAction_OnPlayerStateChange;
+        catPettingTimer.onTimerDone += ProcessAction_CatTimerDone;
     }
 
     private void OnDisable()
     {
         _playerScript.onPlayerStateChange -= ProcessAction_OnPlayerStateChange;
+        catPettingTimer.onTimerDone -= ProcessAction_CatTimerDone;
     }
 
     private void setTriggerText(bool visible, String content)
@@ -102,10 +109,15 @@ public class PlayerBehaviour : MonoBehaviour
         Working();
         Petting();
 
-        if(inCatLocation && Input.GetKeyDown(KeyCode.Q)) //in triggerbox and pressed q -> go into petting mode
+        if (inCatLocation && Input.GetKeyDown(KeyCode.Q)) //in triggerbox and pressed q -> go into petting mode
         {
             _playerScript.onPlayerStateChange.Invoke(PlayerState.Petting);
             setTriggerText(true, "press E");
+            if (!_isCatPetTimerActive)
+            { 
+                catPettingTimer.RunTimer();
+                _isCatPetTimerActive = true;
+            }
         } else if(inWorkLocation && Input.GetKeyDown(KeyCode.Q)) //in triggerbox and pressed q -> go into working mode
         {
             _playerScript.onPlayerStateChange.Invoke(PlayerState.Working);
@@ -173,7 +185,7 @@ public class PlayerBehaviour : MonoBehaviour
 
         Looking();
 
-        cube1Material.color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+        cube1Material.color = new Color(1 - (float)catMeter, (float)catMeter, 0);
         cube2Material.color = new Color(0, 0, 1);
 
         // Überprüft, ob die linke Maustaste gedrückt wird
@@ -226,6 +238,15 @@ public class PlayerBehaviour : MonoBehaviour
     void ProcessAction_OnPlayerStateChange(PlayerState newState)
     {
         state = newState;
+
+        //reset catMeter when entering a mode
+        catMeter = 0;
+    }
+
+    void ProcessAction_CatTimerDone()
+    {
+        _isCatPetTimerActive = false;
+        GameEventManager.Instance.onCatInteraction.Invoke(catMeter);
     }
 
     #endregion
