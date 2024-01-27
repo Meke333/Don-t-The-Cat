@@ -4,10 +4,13 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - cat_location_1
   - work_location
   - cat
   - work
+  - cat_location_urne
+  - cat_location_vase
+  - cat_location_radio
+  - cat_location_selfdestruct_button
   layers:
   - Default
   - TransparentFX

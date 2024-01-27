@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 148848913}
   m_Layer: 0
   m_Name: CatTriggerBoxVase
-  m_TagString: cat_location_1
+  m_TagString: cat_location_vase
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -439,6 +439,63 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 197992043}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &388852465
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2085374533}
+    m_Modifications:
+    - target: {fileID: 648567783408584197, guid: 71dee21b628ebe9449aebb05d8795f41, type: 3}
+      propertyPath: m_Name
+      value: Cat
+      objectReference: {fileID: 0}
+    - target: {fileID: 7422698325436220124, guid: 71dee21b628ebe9449aebb05d8795f41, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7422698325436220124, guid: 71dee21b628ebe9449aebb05d8795f41, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7422698325436220124, guid: 71dee21b628ebe9449aebb05d8795f41, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7422698325436220124, guid: 71dee21b628ebe9449aebb05d8795f41, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7422698325436220124, guid: 71dee21b628ebe9449aebb05d8795f41, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7422698325436220124, guid: 71dee21b628ebe9449aebb05d8795f41, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7422698325436220124, guid: 71dee21b628ebe9449aebb05d8795f41, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7422698325436220124, guid: 71dee21b628ebe9449aebb05d8795f41, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7422698325436220124, guid: 71dee21b628ebe9449aebb05d8795f41, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7422698325436220124, guid: 71dee21b628ebe9449aebb05d8795f41, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 71dee21b628ebe9449aebb05d8795f41, type: 3}
 --- !u!1 &570233834
 GameObject:
   m_ObjectHideFlags: 0
@@ -453,7 +510,7 @@ GameObject:
   - component: {fileID: 570233835}
   m_Layer: 0
   m_Name: CatTriggerBoxRadio
-  m_TagString: cat_location_1
+  m_TagString: cat_location_radio
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -992,6 +1049,11 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!4 &966284922 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7422698325436220124, guid: 71dee21b628ebe9449aebb05d8795f41, type: 3}
+  m_PrefabInstance: {fileID: 388852465}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1132942883
 GameObject:
   m_ObjectHideFlags: 0
@@ -1409,7 +1471,7 @@ GameObject:
   - component: {fileID: 1312831987}
   m_Layer: 0
   m_Name: CatTriggerBoxUrne
-  m_TagString: cat_location_1
+  m_TagString: cat_location_urne
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1620,7 +1682,7 @@ GameObject:
   - component: {fileID: 1698260342}
   m_Layer: 0
   m_Name: CatTriggerBoxSelfdestructButton
-  m_TagString: cat_location_1
+  m_TagString: cat_location_selfdestruct_button
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2039,7 +2101,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.8500004, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 966284922}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2100883595
@@ -2152,6 +2215,7 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 2073895433}
   - {fileID: 705507995}
   - {fileID: 2100883599}
   - {fileID: 1840165755}
@@ -2163,4 +2227,3 @@ SceneRoots:
   - {fileID: 1132942887}
   - {fileID: 1161767049}
   - {fileID: 1155074035}
-  - {fileID: 2073895433}

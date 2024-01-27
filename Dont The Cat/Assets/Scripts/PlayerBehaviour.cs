@@ -41,6 +41,8 @@ public class PlayerBehaviour : MonoBehaviour
     private bool inCatLocation = false;
     private bool inWorkLocation = false;
 
+    public CatLocation cat_location;
+
     private Timer catPettingTimer = new Timer();
     public int catPettingTime;
     bool _isCatPetTimerActive;
@@ -56,12 +58,14 @@ public class PlayerBehaviour : MonoBehaviour
     {
         _playerScript.onPlayerStateChange += ProcessAction_OnPlayerStateChange;
         catPettingTimer.onTimerDone += ProcessAction_CatTimerDone;
+        GameEventManager.Instance.onCatLocationSet += ProcessAction_OnCatLocationSet;
     }
 
     private void OnDisable()
     {
         _playerScript.onPlayerStateChange -= ProcessAction_OnPlayerStateChange;
         catPettingTimer.onTimerDone -= ProcessAction_CatTimerDone;
+        GameEventManager.Instance.onCatLocationSet -= ProcessAction_OnCatLocationSet;
     }
 
     private void setTriggerText(bool visible, String content)
@@ -72,12 +76,39 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        switch(other.gameObject.tag)
+        switch (other.gameObject.tag)
         {
-            case "cat_location_1":
-                setTriggerText(true, "press Q");
-                inCatLocation = true;
-                inWorkLocation = false;
+            case "cat_location_vase":
+                if (cat_location == CatLocation.Vase)
+                {
+                    setTriggerText(true, "press Q");
+                    inCatLocation = true;
+                    inWorkLocation = false;
+                }
+                break;
+            case "cat_location_urne":
+                if (cat_location == CatLocation.Urne)
+                {
+                    setTriggerText(true, "press Q");
+                    inCatLocation = true;
+                    inWorkLocation = false;
+                }
+                break;
+            case "cat_location_radio":
+                if (cat_location == CatLocation.Radio)
+                {
+                    setTriggerText(true, "press Q");
+                    inCatLocation = true;
+                    inWorkLocation = false;
+                }
+                break;
+            case "cat_location_selfdestruct_button":
+                if (cat_location == CatLocation.SelfDestructButton)
+                {
+                    setTriggerText(true, "press Q");
+                    inCatLocation = true;
+                    inWorkLocation = false;
+                }
                 break;
             case "work_location":
                 setTriggerText(true, "press Q");
@@ -91,7 +122,10 @@ public class PlayerBehaviour : MonoBehaviour
     {
         switch (other.gameObject.tag)
         {
-            case "cat_location_1":
+            case "cat_location_vase":
+            case "cat_location_urne":
+            case "cat_location_radio":
+            case "cat_location_selfdestruct_button":
                 setTriggerText(false, "");
                 inCatLocation = false;
                 break;
@@ -286,9 +320,14 @@ public class PlayerBehaviour : MonoBehaviour
         GameEventManager.Instance.onCatInteraction?.Invoke(catMeter);
     }
 
+    void ProcessAction_OnCatLocationSet(CatLocation location)
+    {
+        cat_location = location;
+    }
+
     #endregion
-    
-    
+
+
 }
 
 
