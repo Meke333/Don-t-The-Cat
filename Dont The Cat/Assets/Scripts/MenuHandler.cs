@@ -8,14 +8,14 @@ public class MenuHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        AudioHandler.Instance.PlayLoopSound(Clip.Cricket);
+        AudioHandler.Instance.PlayLoopSound(Clip.Meow_Melody);
     }
 
     public void onPlayButtonClick()
     {
-        AudioHandler.Instance.PlaySingleSound(Clip.Bounce);
-
         AudioHandler.Instance.StopLoopSound();
+
+        AudioHandler.Instance.PlaySingleSound(Clip.Button_Press);
 
         SceneManager.LoadScene("Level Design");
     }
