@@ -4,19 +4,39 @@ using UnityEngine;
 
 public enum Clip
 {
+    //walking lol
     Cat_Walking_On_Wood,
-    Paper_Rustle,
-    Agressive_Hissing,
-    Aggressive_Meow = 3, //6 times
-    Aggressive_Scream = 9, //3 times
-    Aggressive_Pur,
-    Calm_Meow = 11, //8 times (2 times deep voice)
-    Calm_More_Pets_Please = 19,
-    Calm_Pur,
-    Cat_Exploding = 21, //2 times
-    Computer_Beep_Boop = 23,
-    Nuke_Boom = 24, //2 times
-    Gun_Shot = 25 //2 times
+    //when cat arrives at interaction
+    Paper_Rustle, 
+    //when petted too much
+    Agressive_Hissing = 2, //2 times
+    //when petted too much
+    Aggressive_Meow = 4, //6 times 
+    Aggressive_Scream = 10, //3 times
+    Aggressive_Pur = 13,
+    //random?
+    Calm_Meow = 14, //9 times (2 times deep voice)
+    //when pettet too less
+    Calm_Pet_Demanding = 23, //4 times
+    //pleased cat
+    Calm_Pur = 27, //2 times
+    //at radio or self destruct
+    Cat_Exploding = 29, //4 times 
+    //clicking on a switch
+    Computer_Beep_Boop = 33, //2 times
+    //if you press nuke button?
+    Button_Press = 35,
+    //when you pressed nuke button and it was correct!
+    Nuke_Boom = 36, //2 times  
+    //when you get shot by cat
+    Gun_Shot = 38, //2 times 
+    //when cat hits selfdestruct button
+    Selfdestruction_Siren = 40,
+    Meow_Melody = 41,
+    //if vase/urne fall down
+    Glass_Shatter = 42, //2 times
+    //when cat lands on ground/object
+    Landing_Sound = 44
 }
 
 public class AudioHandler : MonoBehaviour
