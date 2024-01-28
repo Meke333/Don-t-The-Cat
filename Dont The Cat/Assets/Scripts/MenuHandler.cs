@@ -11,17 +11,12 @@ public class MenuHandler : MonoBehaviour
         AudioHandler.Instance.PlayLoopSound(Clip.Cricket);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void onPlayButtonClick()
     {
+        AudioHandler.Instance.PlaySingleSound(Clip.Bounce);
+
         AudioHandler.Instance.StopLoopSound();
 
-        AudioHandler.Instance.PlaySingleSound(Clip.Bounce);
         SceneManager.LoadScene("Level Design");
     }
 }
