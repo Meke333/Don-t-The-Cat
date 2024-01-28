@@ -60,8 +60,8 @@ public class CatAnimator : MonoBehaviour
 
     void ProcessAction_OnCatLocation(CatLocation location)
     {
-        Debug.Log("WALK");
-        
+        AudioHandler.Instance.PlayLoopSound(Clip.Cat_Walking_On_Wood);
+
         switch (location)
         {
             case CatLocation.Nothing:
@@ -122,11 +122,13 @@ public class CatAnimator : MonoBehaviour
 
     void ProcessAction_OnCatJump()
     {
+        AudioHandler.Instance.StopLoopSound();
         catAnimator.SetTrigger(Names.IsJumping);
     }
 
     void ProcessAction_OnCatLanded()
     {
+        AudioHandler.Instance.PlaySingleSound(Clip.Landing_Sound);
         catAnimator.SetTrigger(Names.HasLanded);
     }
 
