@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class CatBehavior : MonoBehaviour
@@ -16,8 +17,11 @@ public class CatBehavior : MonoBehaviour
     
     public StateStage stage = StateStage.Enter;
 
-    private Timer _timer = new Timer();
-    public bool isTimerDone;
+    private Timer _nothingTimer = new Timer();
+    public bool isNothingTimerDone;
+    
+    private Timer _reactionTimer = new Timer();
+    public bool isReactionTimerDone;
 
     [Space]
     [Header("GAME DESIGN")]
@@ -38,16 +42,20 @@ public class CatBehavior : MonoBehaviour
 
     async private void OnEnable()
     {
-        _timer.onTimerDone += ProcessAction_TimerDone;
+        _nothingTimer.onTimerDone += () => isNothingTimerDone = true;
+        _reactionTimer.onTimerDone += ProcessAction_TimerDone;
         _catScript.onCatStateChange += ProcessAction_CatStateChange;
+        _catScript.onCatLanded += SetDangerTimer;
         await Task.Yield();
         GameEventManager.Instance.onCatInteraction += ProcessAction_CatInteraction;
     }
 
     private void OnDisable()
     {
-        _timer.onTimerDone -= ProcessAction_TimerDone;
+        _nothingTimer.onTimerDone -= () => isNothingTimerDone = true;
+        _reactionTimer.onTimerDone -= ProcessAction_TimerDone;
         _catScript.onCatStateChange -= ProcessAction_CatStateChange;
+        _catScript.onCatLanded -= SetDangerTimer;
         GameEventManager.Instance.onCatInteraction -= ProcessAction_CatInteraction;
     }
 
@@ -111,12 +119,12 @@ public class CatBehavior : MonoBehaviour
         switch (stage)
         {
             case StateStage.Enter:
-                _timer.SetTimer(Random.Range(catMinNothingTime, catMaxNothingTime));
-                isTimerDone = false;
-                _timer.RunTimer();
+                _nothingTimer.SetTimer(Random.Range(catMinNothingTime, catMaxNothingTime));
+                isNothingTimerDone = false;
+                _nothingTimer.RunTimer();
                 break;
             case StateStage.Update:
-                if (!isTimerDone)
+                if (!isNothingTimerDone)
                     return;
 
                 int randomLocation = Random.Range(1, Enum.GetNames(typeof(CatLocation)).Length);
@@ -135,14 +143,13 @@ public class CatBehavior : MonoBehaviour
         switch (stage)
         {
             case StateStage.Enter:
-                SetDangerTimer();
                 break;
             case StateStage.Update:
                 //if Timer is done => You Dead
-                if (!isTimerDone)
+                if (!isReactionTimerDone)
                     return;
-                
-                if (state != CatState.InPetMode)
+
+                if (state == CatState.InPetMode)
                     return;
                 
                 //DEAD
@@ -159,14 +166,13 @@ public class CatBehavior : MonoBehaviour
         switch (stage)
         {
             case StateStage.Enter:
-                SetDangerTimer();
                 break;
             case StateStage.Update:
                 //if Timer is done => You Dead
-                if (!isTimerDone)
+                if (!isReactionTimerDone)
                     return;
                 
-                if (state != CatState.InPetMode)
+                if (state == CatState.InPetMode)
                     return;
                 
                 //DEAD
@@ -183,14 +189,13 @@ public class CatBehavior : MonoBehaviour
         switch (stage)
         {
             case StateStage.Enter:
-                SetDangerTimer();
                 break;
             case StateStage.Update:
                 //if Timer is done => You Dead
-                if (!isTimerDone)
+                if (!isReactionTimerDone)
                     return;
                 
-                if (state != CatState.InPetMode)
+                if (state == CatState.InPetMode)
                     return;
                 
                 //DEAD
@@ -207,14 +212,13 @@ public class CatBehavior : MonoBehaviour
         switch (stage)
         {
             case StateStage.Enter:
-                SetDangerTimer();
                 break;
             case StateStage.Update:
                 //if Timer is done => You Dead
-                if (!isTimerDone)
+                if (!isReactionTimerDone)
                     return;
                 
-                if (state != CatState.InPetMode)
+                if (state == CatState.InPetMode)
                     return;
                 
                 //DEAD
@@ -228,9 +232,11 @@ public class CatBehavior : MonoBehaviour
 
     void SetDangerTimer()
     {
-        _timer.SetTimer(reactionTime);
-        isTimerDone = false;
-        _timer.RunTimer();
+        Debug.Log("CAT LANDED");
+        
+        _reactionTimer.SetTimer(reactionTime);
+        isReactionTimerDone = false;
+        _reactionTimer.RunTimer();
 
         nextLocation = CatLocation.Nothing;
     }
@@ -249,7 +255,7 @@ public class CatBehavior : MonoBehaviour
 
     void ProcessAction_TimerDone()
     {
-        isTimerDone = true;
+        isReactionTimerDone = true;
     }
 
     void ProcessAction_CatStateChange(CatState newState)
@@ -261,7 +267,7 @@ public class CatBehavior : MonoBehaviour
             case CatState.Unpetted:
                 break;
             case CatState.InPetMode:
-                _timer.InterruptTimer();
+                _reactionTimer.InterruptTimer();
                 break;
             case CatState.Pleased:
                 nextLocation = CatLocation.Nothing;

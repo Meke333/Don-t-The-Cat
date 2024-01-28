@@ -19,6 +19,7 @@ public class GameEventManager : MonoBehaviour
     public Action onCatInPetState;
     public Action onCatGettingPet;
     public Action onCatNearTheObject;
+    public Action onYouHaveNotPleasedTheCatInTime;
 
 
     #endregion

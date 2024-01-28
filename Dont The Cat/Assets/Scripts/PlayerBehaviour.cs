@@ -83,6 +83,7 @@ public class PlayerBehaviour : MonoBehaviour
         GameEventManager.Instance.onCatLocationSet += ProcessAction_OnCatLocationSet;
         GameEventManager.Instance.onCatNearTheObject += ProcessAction_OnCatNearTheObject;
         GameEventManager.Instance.onCatReaction += ProcessAction_onCatReaction;
+        GameEventManager.Instance.onPlayerDied += Die;
     }
 
     private void OnDisable()
@@ -92,6 +93,7 @@ public class PlayerBehaviour : MonoBehaviour
         GameEventManager.Instance.onCatLocationSet -= ProcessAction_OnCatLocationSet;
         GameEventManager.Instance.onCatNearTheObject -= ProcessAction_OnCatNearTheObject;
         GameEventManager.Instance.onCatReaction -= ProcessAction_onCatReaction;
+        GameEventManager.Instance.onPlayerDied -= Die;
     }
 
     private void setTriggerKeyIcon(bool visible, int key) //key -> 0:Q, 1:E
@@ -102,6 +104,17 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        if (other.gameObject.tag.Equals("work_location"))
+        {
+            if (state == PlayerState.Working)
+                return;
+            
+            setTriggerKeyIcon(true, 0); //show Q
+            inWorkLocation = true;
+            inCatLocation = false;
+        }
+        
+        
         if (!isCatPetAble || state == PlayerState.Petting)
             return;
         
@@ -139,12 +152,14 @@ public class PlayerBehaviour : MonoBehaviour
                     inWorkLocation = false;
                 }
                 break;
-            case "work_location":
+            /*case "work_location":
                 setTriggerKeyIcon(true, 0); //show Q
                 inWorkLocation = true;
                 inCatLocation = false;
-                break;
+                break;*/
         }
+
+        
     }
 
     private void OnTriggerExit(Collider other)
@@ -175,7 +190,6 @@ public class PlayerBehaviour : MonoBehaviour
         Working();
         Petting();
         LookAtDisaster();
-        Die();
 
 
         if (state != PlayerState.Petting && inCatLocation && Input.GetKeyDown(KeyCode.Q)) //in pet-triggerbox and pressed q -> go into petting mode
@@ -330,8 +344,8 @@ public class PlayerBehaviour : MonoBehaviour
 
     void Die()
     {
-        if (state != PlayerState.Die)
-            return;
+        //if (state != PlayerState.Die)
+            //return;
 
         //Stop walking
         cameraAnimator.SetBool("IsWalking", false);
