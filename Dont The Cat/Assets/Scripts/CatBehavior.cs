@@ -37,6 +37,8 @@ public class CatBehavior : MonoBehaviour
 
     public bool wasVaseElimintaed, wasUrneElimintaed, wasRadioEliminated, wasSelftdestructionButtonEliminated;
 
+    public bool isCatReactionPlaying;
+
     private void Awake()
     {
         _catScript = GetComponent<CatScript>();
@@ -44,6 +46,8 @@ public class CatBehavior : MonoBehaviour
         wasSelftdestructionButtonEliminated = false;
         wasUrneElimintaed = false;
         wasVaseElimintaed = false;
+
+        isCatReactionPlaying = false;
     }
 
     async private void OnEnable()
@@ -333,8 +337,13 @@ public class CatBehavior : MonoBehaviour
         Debug.Log("CAT INTERACTION WEWO: " + newCatState);
     }
 
-    void ProcessAction_onTransmittingPetValue(double value)
+    async void ProcessAction_onTransmittingPetValue(double value)
     {
+        if (isCatReactionPlaying)
+            return;
+
+        isCatReactionPlaying = true;
+
         if (value < underpettedLimit)
             AudioHandler.Instance.PlaySingleSound(Clip.Calm_Pet_Demanding); //demanding
         else if (value > overpettedLimit)
@@ -346,6 +355,10 @@ public class CatBehavior : MonoBehaviour
         }
         else
             AudioHandler.Instance.PlaySingleSound(Random.Range(0, 3) > 2 ? Clip.Calm_Pur : Clip.Calm_Meow); //1/3 puring, 2/3 meowing
+
+        await Task.Delay(800);
+
+        isCatReactionPlaying = false;
     }
 
     private void ProcessAction_OnCatInPetState()
