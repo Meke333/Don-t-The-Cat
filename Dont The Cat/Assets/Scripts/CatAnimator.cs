@@ -115,9 +115,9 @@ public class CatAnimator : MonoBehaviour
         catAnimator.SetTrigger(Names.InPetState);
     }
 
-    void ProcessAction_OnCatGettingPet()
+    void ProcessAction_OnCatGettingPet(bool isPet)
     {
-        catAnimator.SetTrigger(Names.IsPetting);
+        catAnimator.SetBool(Names.IsPetting, isPet);
     }
 
     void ProcessAction_OnCatJump()

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class MouseCursor : MonoBehaviour
@@ -9,8 +10,8 @@ public class MouseCursor : MonoBehaviour
     
     public GameObject PetCursorInactive;
     public GameObject PetCursorActive;
-
     public GameObject ButtonCursor;
+    public GameObject NothingCursor;
 
     public GameObject ActiveCursor;
 
@@ -19,12 +20,13 @@ public class MouseCursor : MonoBehaviour
 
     private void Awake()
     {
-        ActiveCursor = PetCursorActive;
+        ActiveCursor = NothingCursor;
         ActiveCursor.SetActive(true);
     }
 
-    private void OnEnable()
+    private async void OnEnable()
     {
+        await Task.Yield();
         GameEventManager.Instance.onPlayerStateChange += ProcessAction_onPlayerStateChange;
         GameEventManager.Instance.onCatGettingPet += ProcessAction_onCatGettingPet;
     }
@@ -47,11 +49,16 @@ public class MouseCursor : MonoBehaviour
     {
         if (isPet)
         {
+            ActiveCursor.SetActive(false);
             ActiveCursor = PetCursorActive;
+            ActiveCursor.SetActive(true);
         }
         else
         {
+            
+            ActiveCursor.SetActive(false);
             ActiveCursor = PetCursorInactive;
+            ActiveCursor.SetActive(true);
         }
     }
 
@@ -60,19 +67,31 @@ public class MouseCursor : MonoBehaviour
         switch (state)
         {
             case PlayerState.Walking:
-                ActiveCursor = null;
+                
+                ActiveCursor.SetActive(false);
+                ActiveCursor = NothingCursor;
                 break;
             case PlayerState.Petting:
+                
+                ActiveCursor.SetActive(false);
                 ActiveCursor = PetCursorInactive;
+                ActiveCursor.SetActive(true);
                 break;
             case PlayerState.Working:
+                
+                ActiveCursor.SetActive(false);
                 ActiveCursor = ButtonCursor;
+                ActiveCursor.SetActive(true);
                 break;
             case PlayerState.LookAtDisaster:
-                ActiveCursor = null;
+                
+                ActiveCursor.SetActive(false);
+                ActiveCursor = NothingCursor;
                 break;
             case PlayerState.Die:
-                ActiveCursor = null;
+                
+                ActiveCursor.SetActive(false);
+                ActiveCursor = NothingCursor;
                 break;
         }
     }
