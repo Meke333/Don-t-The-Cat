@@ -19,6 +19,9 @@ public class CatBehavior : MonoBehaviour
     private Timer _timer = new Timer();
     public bool isTimerDone;
 
+    [Space]
+    [Header("GAME DESIGN")]
+    
     public int reactionTime;
     public int catMinNothingTime;
     public int catMaxNothingTime;

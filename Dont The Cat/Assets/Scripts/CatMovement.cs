@@ -9,16 +9,9 @@ public class CatMovement : MonoBehaviour
 {
     private CatScript _catScript;
 
-    public AnimationCurve jumpPositionAnimation;
-    public float jumpDistanceForward;
-    public float jumpDurationInSeconds;
-    
-    public float speed;
-    public float gravity = 20;
-    public float jumpSpeed = 8;
     public int jumpCounter = 0;
 
-    private bool jumppls;
+    private bool _canJump;
 
     public Vector3 moveDirection = Vector3.zero;
     
@@ -33,9 +26,16 @@ public class CatMovement : MonoBehaviour
     public Transform SelfDestructButtonPosition;
 
     public CharacterController characterController;
-    public Rigidbody rigidbody;
 
     public LayerMask layerMask;
+    
+    [Space]
+    [Header("GAME DESIGN")]
+    
+    public float speed;
+    public float gravity = 20;
+    public float jumpSpeed = 8;
+    
 
     private void Awake()
     {
@@ -66,10 +66,10 @@ public class CatMovement : MonoBehaviour
         {
             moveDirection = transform.forward * speed;
             
-            if (jumppls)
+            if (_canJump)
             {
                 moveDirection.y = jumpSpeed;
-                jumppls = false;
+                _canJump = false;
             }
         }
         
@@ -119,12 +119,12 @@ public class CatMovement : MonoBehaviour
     async void JumpSequence()
     {
         Debug.Log("JUMP");
-        jumppls = true;
+        _canJump = true;
         jumpCounter++;
         
 
         await Task.Delay(2000);
-        jumppls = false;
+        _canJump = false;
         _isTargetActive = false;
         
         _catScript.onCatLanded.Invoke();

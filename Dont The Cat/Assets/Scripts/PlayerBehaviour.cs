@@ -15,16 +15,12 @@ public class PlayerBehaviour : MonoBehaviour
     
     public PlayerState state;
 
-    public float playerSpeed;
-    public float gravity = 9.81f;
+    
     
     public float horizontalInput, verticalInput; //vertical and horizontal movement tracker [-1, 0, 1]
 
     public Vector3 directionForward, directionRight; //direction vector for foward and sideward
 
-    public Vector2 mouseSensitivity; //sensitivity for rotation movement
-    public float clampValuesXRotation; //min/max value for the x-rotation (up and down)
-    
     public float _mouseX, _mouseY; //mouse position
     public float _lastMouseX, _lastMouseY; //last mouse position
     private float xRotation, yRotation; //rotation of the player based on the mouse
@@ -40,8 +36,6 @@ public class PlayerBehaviour : MonoBehaviour
     public Material cube2Material; //for DEBUG purposes
 
     //public TextMeshProUGUI triggerText; //for entering and leaving cat-/work-mode
-    public Image triggerIcon;
-    public Sprite q_key_icon, e_key_icon, mousewiggle_key_icon;
 
     public Transform CatPosition;
 
@@ -51,10 +45,26 @@ public class PlayerBehaviour : MonoBehaviour
     public CatLocation cat_location;
 
     private Timer catPettingTimer = new Timer();
-    public int catPettingTime;
+    
     bool _isCatPetTimerActive;
 
     public bool isCatPetAble;
+    
+    [Space]
+    [Header("GAME DESIGN")]
+    public Vector2 mouseSensitivity; //sensitivity for rotation movement
+    public float clampValuesXRotation; //min/max value for the x-rotation (up and down)
+    
+    [Space]
+    public float playerSpeed;
+    public float gravity = 9.81f;
+    
+    [Space]
+    public int catPettingTime;
+    
+    [Space]
+    public Image triggerIcon;
+    public Sprite q_key_icon, e_key_icon, mousewiggle_key_icon;
 
     private void Awake()
     {
@@ -290,6 +300,8 @@ public class PlayerBehaviour : MonoBehaviour
         }
 
         //Debug.Log("Cat-Meter: " + catMeter);
+        
+        GameEventManager.Instance.onTransmittingPetValue?.Invoke(catMeter);
     }
 
     void LookAtDisaster()

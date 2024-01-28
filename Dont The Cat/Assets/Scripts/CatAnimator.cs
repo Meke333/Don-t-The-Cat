@@ -22,6 +22,7 @@ public class CatAnimator : MonoBehaviour
         public static readonly int IsOverpet = Animator.StringToHash("IsOverpet");
         public static readonly int PetTimerDone = Animator.StringToHash("PetTimerDone");
         public static readonly int HasLanded = Animator.StringToHash("HasLanded");
+        public static readonly int CatMeter = Animator.StringToHash("CatMeter");
     }
 
     private void Awake()
@@ -37,6 +38,7 @@ public class CatAnimator : MonoBehaviour
         _catScript.onCatLanded += ProcessAction_OnCatLanded;
         await Task.Yield();
         GameEventManager.Instance.onCatLocationSet += ProcessAction_OnCatLocation;
+        GameEventManager.Instance.onTransmittingPetValue += ProcessAction_onTransmittingPetValue;
         GameEventManager.Instance.onCatInPetState += ProcessAction_OnCatInPetState;
         GameEventManager.Instance.onCatGettingPet += ProcessAction_OnCatGettingPet;
     }
@@ -124,6 +126,11 @@ public class CatAnimator : MonoBehaviour
     void ProcessAction_OnCatLanded()
     {
         catAnimator.SetTrigger(Names.HasLanded);
+    }
+
+    void ProcessAction_onTransmittingPetValue(double value)
+    {
+        catAnimator.SetFloat(Names.CatMeter, (float) value);
     }
     
 

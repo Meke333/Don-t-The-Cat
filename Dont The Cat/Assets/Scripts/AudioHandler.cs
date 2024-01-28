@@ -14,6 +14,7 @@ public class AudioHandler : MonoBehaviour
 {
     public static AudioHandler Instance;
     
+    [Header("SOUND DESIGNER")]
     public AudioClip[] clips;
     private AudioSource source;
 
@@ -52,6 +53,6 @@ public class AudioHandler : MonoBehaviour
         audioSource.volume = volume;
         audioSource.Play();
 
-        Destroy(audioSource, currentClip.length); // Zerstört das AudioSource-Objekt, nachdem der Clip abgespielt wurde
+        Destroy(audioSource, currentClip.length); // Zerstï¿½rt das AudioSource-Objekt, nachdem der Clip abgespielt wurde
     }
 }
