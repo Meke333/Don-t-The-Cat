@@ -4,10 +4,12 @@ using UnityEngine;
 
 public enum Clip
 {
-    Cricket,
-    Bounce,
-    Fall,
-    Roll
+    Cat_Walking_On_Wood,
+    Paper_Rustle,
+    Nuke_Boom,
+    Cat_Boom,
+    Gun_Loading_Double_Peng,
+    Gun_Loading_Peng
 }
 
 public class AudioHandler : MonoBehaviour
