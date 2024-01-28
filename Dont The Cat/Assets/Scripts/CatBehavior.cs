@@ -33,7 +33,7 @@ public class CatBehavior : MonoBehaviour
     [Range(0,1)]
     public double underpettedLimit;
     [Range(0,1)]
-    public double overpettedLimit;
+    public double overpettedLimit, absolutelyOverpettedLimit;
 
     private void Awake()
     {
@@ -289,7 +289,7 @@ public class CatBehavior : MonoBehaviour
                 ProcessStage();
                 break;
             case CatState.Overpetted:
-                //YOU DIED
+                AudioHandler.Instance.PlaySingleSound(Clip.Gun_Shot);
                 break;
             case CatState.UnderPetted:
                 //YOU DIED
@@ -316,6 +316,9 @@ public class CatBehavior : MonoBehaviour
         else if (value > overpettedLimit)
         {
             AudioHandler.Instance.PlaySingleSound(Random.Range(0, 7) > 5 ? Clip.Agressive_Hissing : Clip.Aggressive_Meow); //1/4 hissing, 3/4 meowing
+        } else if(value > absolutelyOverpettedLimit)
+        {
+            AudioHandler.Instance.PlaySingleSound(Clip.Aggressive_Scream);
         }
         else
             AudioHandler.Instance.PlaySingleSound(Random.Range(0, 3) > 2 ? Clip.Calm_Pur : Clip.Calm_Meow); //1/3 puring, 2/3 meowing

@@ -116,7 +116,7 @@ public class Raycast : MonoBehaviour
             
             if (Physics.Raycast(ray, out hit, length, layerMask))
             {
-                //LEVER SOUND HERE
+                AudioHandler.Instance.PlaySingleSound(Clip.Computer_Beep_Boop);
                 
                 Debug.DrawRay(ray.origin,ray.direction, Color.green, 0.05f);
 
@@ -142,8 +142,8 @@ public class Raycast : MonoBehaviour
             }
             else if(Physics.Raycast(ray, out RaycastHit hit2, length, 1<<7))
             {
-                // BUTTON PUSH SOUND HERE
-                
+                AudioHandler.Instance.PlaySingleSound(Clip.Button_Press);
+
                 buttonAnim.SetTrigger("Push");
                 disableCollider(hit2.collider, 3, Time.time);
                 
@@ -219,10 +219,11 @@ public class Raycast : MonoBehaviour
         {
             GameEventManager.Instance.onWonGame?.Invoke();
         }
-        
-        //richtige Antwort SOUND HERE
-        
-        
+
+
+        AudioHandler.Instance.PlaySingleSound(Clip.Nuke_Boom);
+
+
         return true;
     }
 }

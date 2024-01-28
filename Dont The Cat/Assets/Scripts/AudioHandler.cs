@@ -7,32 +7,32 @@ public enum Clip
     //walking lol
     Cat_Walking_On_Wood,                                                // implemented (CatAnimator) - not tested
     //when cat arrives at interaction
-    Paper_Rustle, 
+    Paper_Rustle,                                                       // implemented (CatAnimator) - not tested    
     //when petted too much
     Agressive_Hissing = 2, //2 times                                    // implemented (CatBehavior) - not tested
     //when petted too much
     Aggressive_Meow = 4, //6 times                                      // implemented (CatBehavior) - not tested
-    Aggressive_Scream = 10, //3 times
+    Aggressive_Scream = 10, //3 times                                   // implemented (CatBehavior) - not tested
     Aggressive_Pur = 13,
     //random?
     Calm_Meow = 14, //9 times (2 times deep voice)                      // implemented (CatBehavior) - not tested
     //when pettet too less
     Calm_Pet_Demanding = 23, //4 times                                  // implemented (CatBehavior) - not tested
     //pleased cat
-    Calm_Pur = 27, //2 times
+    Calm_Pur = 27, //2 times                                            // implemented (CatBehavior) - not tested
     //at radio or self destruct
     Cat_Exploding = 29, //4 times                                       // implemented (CatBehavior) - not tested
     //clicking on a switch
-    Computer_Beep_Boop = 33, //2 times
+    Computer_Beep_Boop = 33, //2 times                                  // implemented (Raycast) - not tested
     //if you press nuke button?
-    Button_Press = 35,
+    Button_Press = 35,                                                  // implemented (Raycast) - not tested
     //when you pressed nuke button and it was correct!
-    Nuke_Boom = 36, //2 times  
+    Nuke_Boom = 36, //2 times                                           // implemented (Raycast) - not tested
     //when you get shot by cat
-    Gun_Shot = 38, //2 times 
+    Gun_Shot = 38, //2 times                                            // implemented (CatBehavior) - not tested
     //when cat hits selfdestruct button
     Selfdestruction_Siren = 40,                                         // implemented (CatBehavior) - not tested
-    Meow_Melody = 41,
+    Meow_Melody = 41,                                                   // implemented (MenuHandler) - tested
     //if vase/urne fall down
     Glass_Shatter = 42, //2 times                                       // implemented (CatBehavior) - not tested
     //when cat lands on ground/object

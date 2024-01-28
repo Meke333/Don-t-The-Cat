@@ -126,10 +126,14 @@ public class CatAnimator : MonoBehaviour
         catAnimator.SetTrigger(Names.IsJumping);
     }
 
-    void ProcessAction_OnCatLanded()
+    async void ProcessAction_OnCatLanded()
     {
         AudioHandler.Instance.PlaySingleSound(Clip.Landing_Sound);
         catAnimator.SetTrigger(Names.HasLanded);
+
+        await Task.Delay(800);
+
+        AudioHandler.Instance.PlaySingleSound(Clip.Paper_Rustle);
     }
 
     void ProcessAction_onTransmittingPetValue(double value)
