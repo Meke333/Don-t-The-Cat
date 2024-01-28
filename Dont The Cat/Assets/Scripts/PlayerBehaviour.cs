@@ -195,6 +195,7 @@ public class PlayerBehaviour : MonoBehaviour
         if (state != PlayerState.Petting && inCatLocation && Input.GetKeyDown(KeyCode.Q)) //in pet-triggerbox and pressed q -> go into petting mode
         {
             _playerScript.onPlayerStateChange.Invoke(PlayerState.Petting);
+            GameEventManager.Instance.onCatInPetState?.Invoke();
             setTriggerKeyIcon(true, 2); //show Mousewiggle
 
             //Look at cat
@@ -287,6 +288,7 @@ public class PlayerBehaviour : MonoBehaviour
     {
         if (state != PlayerState.Petting)
             return;
+        
         
         //Stop walking
         cameraAnimator.SetBool("IsWalking", false);
@@ -398,6 +400,11 @@ public class PlayerBehaviour : MonoBehaviour
 
         //reset catMeter when entering a mode
         catMeter = 0;
+
+        if (state == PlayerState.Die)
+        {
+            Die();
+        }
     }
 
     void ProcessAction_CatTimerDone()

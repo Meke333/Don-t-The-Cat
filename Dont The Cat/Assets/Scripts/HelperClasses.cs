@@ -14,11 +14,13 @@ public class Timer
 
     public void SetTimer(int newTime)
     {
+        _isTimerInterrupted = false;
         _timerTimeInMilliSeconds = newTime;
     }
 
     async public void RunTimer()
     {
+        
         await Task.Delay(_timerTimeInMilliSeconds);
         if (_isTimerInterrupted) 
             return; 

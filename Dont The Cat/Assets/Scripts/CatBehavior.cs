@@ -48,6 +48,7 @@ public class CatBehavior : MonoBehaviour
         _catScript.onCatLanded += SetDangerTimer;
         await Task.Yield();
         GameEventManager.Instance.onCatInteraction += ProcessAction_CatInteraction;
+        GameEventManager.Instance.onCatInPetState += ProcessAction_OnCatInPetState;
     }
 
     private void OnDisable()
@@ -57,6 +58,7 @@ public class CatBehavior : MonoBehaviour
         _catScript.onCatStateChange -= ProcessAction_CatStateChange;
         _catScript.onCatLanded -= SetDangerTimer;
         GameEventManager.Instance.onCatInteraction -= ProcessAction_CatInteraction;
+        GameEventManager.Instance.onCatInPetState -= ProcessAction_OnCatInPetState;
     }
 
     private void Update()
@@ -295,6 +297,11 @@ public class CatBehavior : MonoBehaviour
         GameEventManager.Instance.onCatReaction?.Invoke(newCatState);
         
         Debug.Log("CAT INTERACTION WEWO: " + newCatState);
+    }
+
+    private void ProcessAction_OnCatInPetState()
+    {
+        _reactionTimer.InterruptTimer();
     }
 
     #endregion

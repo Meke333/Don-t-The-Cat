@@ -20,8 +20,10 @@ public class MouseCursor : MonoBehaviour
 
     private void Awake()
     {
+        Cursor.visible = false;
         ActiveCursor = NothingCursor;
         ActiveCursor.SetActive(true);
+
     }
 
     private async void OnEnable()
@@ -68,17 +70,20 @@ public class MouseCursor : MonoBehaviour
         {
             case PlayerState.Walking:
                 
+                Cursor.lockState = CursorLockMode.Locked;
                 ActiveCursor.SetActive(false);
                 ActiveCursor = NothingCursor;
                 break;
             case PlayerState.Petting:
                 
+                Cursor.lockState = CursorLockMode.Confined;
                 ActiveCursor.SetActive(false);
                 ActiveCursor = PetCursorInactive;
                 ActiveCursor.SetActive(true);
                 break;
             case PlayerState.Working:
                 
+                Cursor.lockState = CursorLockMode.Confined;
                 ActiveCursor.SetActive(false);
                 ActiveCursor = ButtonCursor;
                 ActiveCursor.SetActive(true);

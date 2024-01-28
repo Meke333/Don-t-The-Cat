@@ -159,7 +159,7 @@ public class CatMovement : MonoBehaviour
                 
         }
         
-        targetPosition.y = 0;
+        targetPosition.y = gameObject.transform.position.y;
         gameObject.transform.LookAt(targetPosition);
         _isTargetActive = true;
 
