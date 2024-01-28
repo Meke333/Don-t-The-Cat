@@ -176,6 +176,7 @@ public class CatBehavior : MonoBehaviour
                     return;
                 
                 //DEAD
+                GameEventManager.Instance.onYouHaveNotPleasedTheCatInTime?.Invoke();
                 GameEventManager.Instance.onPlayerDied?.Invoke();
                 
                 break;

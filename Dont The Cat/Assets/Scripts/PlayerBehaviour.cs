@@ -394,6 +394,7 @@ public class PlayerBehaviour : MonoBehaviour
     void ProcessAction_OnPlayerStateChange(PlayerState newState)
     {
         state = newState;
+        GameEventManager.Instance.onPlayerStateChange?.Invoke(state);
 
         //reset catMeter when entering a mode
         catMeter = 0;
