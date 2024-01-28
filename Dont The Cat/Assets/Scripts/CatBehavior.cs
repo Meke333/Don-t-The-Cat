@@ -35,9 +35,15 @@ public class CatBehavior : MonoBehaviour
     [Range(0,1)]
     public double overpettedLimit, absolutelyOverpettedLimit;
 
+    public bool wasVaseElimintaed, wasUrneElimintaed, wasRadioEliminated, wasSelftdestructionButtonEliminated;
+
     private void Awake()
     {
         _catScript = GetComponent<CatScript>();
+        wasRadioEliminated = false;
+        wasSelftdestructionButtonEliminated = false;
+        wasUrneElimintaed = false;
+        wasVaseElimintaed = false;
     }
 
     async private void OnEnable()
@@ -156,7 +162,11 @@ public class CatBehavior : MonoBehaviour
                 if (state == CatState.InPetMode)
                     return;
 
-                AudioHandler.Instance.PlaySingleSound(Clip.Glass_Shatter);
+                if (!wasVaseElimintaed)
+                {
+                    wasVaseElimintaed = true;
+                    AudioHandler.Instance.PlaySingleSound(Clip.Glass_Shatter);
+                }
 
                 //DEAD
                 GameEventManager.Instance.onPlayerDied?.Invoke();
@@ -181,7 +191,11 @@ public class CatBehavior : MonoBehaviour
                 if (state == CatState.InPetMode)
                     return;
 
-                AudioHandler.Instance.PlaySingleSound(Clip.Glass_Shatter);
+                if (!wasUrneElimintaed)
+                {
+                    wasUrneElimintaed = true;
+                    AudioHandler.Instance.PlaySingleSound(Clip.Glass_Shatter);
+                }
 
                 //DEAD
                 GameEventManager.Instance.onYouHaveNotPleasedTheCatInTime?.Invoke();
@@ -207,7 +221,12 @@ public class CatBehavior : MonoBehaviour
                 if (state == CatState.InPetMode)
                     return;
 
-                AudioHandler.Instance.PlaySingleSound(Clip.Cat_Exploding);
+                if (!wasRadioEliminated)
+                {
+                    wasRadioEliminated = true;
+                    AudioHandler.Instance.PlaySingleSound(Clip.Cat_Exploding);
+                }
+
                 
                 //DEAD
                 GameEventManager.Instance.onPlayerDied?.Invoke();
@@ -232,7 +251,12 @@ public class CatBehavior : MonoBehaviour
                 if (state == CatState.InPetMode)
                     return;
 
-                AudioHandler.Instance.PlaySingleSound(Clip.Selfdestruction_Siren);
+                if (!wasSelftdestructionButtonEliminated)
+                {
+                    wasSelftdestructionButtonEliminated = true;
+                    AudioHandler.Instance.PlaySingleSound(Clip.Selfdestruction_Siren);
+                }
+
 
                 //DEAD
                 GameEventManager.Instance.onPlayerDied?.Invoke();
