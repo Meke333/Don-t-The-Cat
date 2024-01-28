@@ -1,9 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Quaternion = UnityEngine.Quaternion;
+using Vector3 = UnityEngine.Vector3;
 
 public class CatMovement : MonoBehaviour
 {
@@ -28,6 +31,10 @@ public class CatMovement : MonoBehaviour
     public CharacterController characterController;
 
     public LayerMask layerMask;
+
+    public float angle;
+    public Vector3 cross;
+    public float distanceToTarget;
     
     [Space]
     [Header("GAME DESIGN")]
@@ -64,7 +71,9 @@ public class CatMovement : MonoBehaviour
 
         if (characterController.isGrounded)
         {
-            moveDirection = transform.forward * speed;
+            //distanceToTarget = Mathf.Max((targetPosition - transform.position).magnitude, 1);
+
+            moveDirection = speed * transform.forward;
             
             if (_canJump)
             {
@@ -80,6 +89,20 @@ public class CatMovement : MonoBehaviour
         //rigidbody.MovePosition( nextPosition);
         characterController.Move(Time.deltaTime * moveDirection);
 
+        /*
+        Vector3 currentDirection = transform.forward;
+        Vector3 targetDirection = (targetPosition - transform.position).normalized;
+
+        angle = Vector3.Angle(currentDirection, targetDirection) ;
+        cross = Vector3.Cross(currentDirection, targetDirection);
+        if (cross.y < 0) angle = -angle;
+        
+        
+        gameObject.transform.Rotate(0,angle * Time.deltaTime, 0);
+        */
+        
+        
+        targetPosition.y = transform.position.y;
         gameObject.transform.LookAt(targetPosition);
     }
 
@@ -123,9 +146,14 @@ public class CatMovement : MonoBehaviour
         jumpCounter++;
         
 
-        await Task.Delay(2000);
+        await Task.Delay(1000);
         _canJump = false;
         _isTargetActive = false;
+
+        Vector3 rotation = transform.rotation.eulerAngles;
+        rotation.x = 0;
+        
+        gameObject.transform.rotation = Quaternion.Euler(rotation);
         
         _catScript.onCatLanded.Invoke();
         GameEventManager.Instance.onCatNearTheObject?.Invoke();
@@ -158,11 +186,21 @@ public class CatMovement : MonoBehaviour
                 break; 
                 
         }
-        
-        targetPosition.y = gameObject.transform.position.y;
-        gameObject.transform.LookAt(targetPosition);
         _isTargetActive = true;
 
+        targetPosition.y = transform.position.y;
+        gameObject.transform.LookAt(targetPosition);
+        
+        /*Vector3 currentDirection = transform.forward;
+        Vector3 targetDirection = (targetPosition - transform.position).normalized;
+
+        angle = Vector3.Angle(currentDirection, targetDirection) ;
+        cross = Vector3.Cross(currentDirection, targetDirection);
+        if (cross.y < 0) angle = -angle;
+        
+
+        gameObject.transform.Rotate(0,angle, 0);
+        */
     }
 
     void ProcessAction_OnCatReaction(CatState state)

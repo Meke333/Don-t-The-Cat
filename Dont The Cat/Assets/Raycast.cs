@@ -29,8 +29,11 @@ public class Raycast : MonoBehaviour
     Animator buttonAnim;
 
     //check lamps
-    bool[,] level1;
-
+    //level
+    GameObject[] levelObjects;
+    GameObject levelParent;
+    bool[,,] levels3D;
+    int levelIndex = 0;
 
 
     class Lever {
@@ -50,7 +53,11 @@ public class Raycast : MonoBehaviour
 
     void Start()
     {
-
+        levelParent = GameObject.FindWithTag("Levels");
+        levelObjects = new GameObject[10];
+        assignObjects(levelParent.transform, levelObjects);
+        
+        
         leverParent = GameObject.FindWithTag("LeverParent");
         lampParent = GameObject.FindWithTag("LampParent");
         button = GameObject.FindWithTag("Button");
@@ -68,8 +75,20 @@ public class Raycast : MonoBehaviour
         anims = new Animator[4, 4];
         renderers = new MeshRenderer[4, 4];
         
-        level1 = new bool[4,4] { { false, false, true, true }, { false, false, true, false }, { false, true, false, false }, { false, true, false, false } };
         
+        levels3D = new bool[10, 4, 4]
+        {
+            { { false, false, true, true }, { false, false, true, false }, { false, true, false, false }, { false, true, false, false } },
+            { { true, false, false, false }, { false, true, false, false }, { false, true, true, true }, { true, false, false, false } },
+            { { false, false, false, true }, { false, false, false, true }, { false, false, false, true }, { true, true, true, true } },
+            { { true, false, true, false }, { false, true, true, false }, { false, false, false, true }, { true, true, true, false } },
+            { { false, true, true, false }, { false, true, false, false }, { true, true, true, true }, { false, false, true, false } },
+            { { false, false, false, false }, { false, false, true, false }, { false, false, true, false }, { true, false, true, true } },
+            { { false, true, true, true }, { false, true, true, false }, { false, true, false, false }, { false, true, false, false } },
+            { { false, true, true, true }, { false, true, true, true }, { false, false, false, false }, { false, false, false, false } },
+            { { false, true, false, true }, { true, false, false, false }, { false, true, false, false }, { false, true, false, true } },
+            { { true, true, true, true }, { true, true, true, true }, { true, true, true, true }, { true, true, true, true } }
+        };
 
         int k = 0;
         for(int i = 0; i<4; i++)
@@ -97,6 +116,8 @@ public class Raycast : MonoBehaviour
             
             if (Physics.Raycast(ray, out hit, length, layerMask))
             {
+                //LEVER SOUND HERE
+                
                 Debug.DrawRay(ray.origin,ray.direction, Color.green, 0.05f);
 
                 string s = hit.collider.tag;
@@ -121,8 +142,15 @@ public class Raycast : MonoBehaviour
             }
             else if(Physics.Raycast(ray, out RaycastHit hit2, length, 1<<7))
             {
-                Debug.Log(checkLevel1());
+                // BUTTON PUSH SOUND HERE
+                
                 buttonAnim.SetTrigger("Push");
+                disableCollider(hit2.collider, 3, Time.time);
+                
+                if (checkLevel())
+                {
+                    StartCoroutine(switchLevels());
+                }
             }
             
             else
@@ -149,6 +177,15 @@ public class Raycast : MonoBehaviour
         rend.material = mat;
         yield return null;
     }
+    
+    IEnumerator switchLevels()
+    {
+        levelObjects[levelIndex].SetActive(false);
+        yield return new WaitForSeconds(1f);
+        levelObjects[levelIndex+1].SetActive(true);
+        levelIndex++;
+        yield return null;
+    }
 
     void assignObjects(Transform parent, GameObject[] array)
     {
@@ -159,22 +196,33 @@ public class Raycast : MonoBehaviour
             i++;        
         }
     }
-
-    bool checkLevel1()
+    
+    bool checkLevel()
     {
         for(int i = 0; i<4; i++)
         {
             for(int j = 0; j<4; j++)
             {
-                if(levers[i, j].isUp == level1[i, j])
+                if(levers[i, j].isUp == levels3D[levelIndex, i, j])
                 {
-                    //GameOver
+                    
                     GameEventManager.Instance.onPlayerDied?.Invoke();
+                    
+                    //Your Dead SOUND HERE
+                    
                     return false;
-
                 }
             }
         }
+
+        if (levelIndex > 8)
+        {
+            GameEventManager.Instance.onWonGame?.Invoke();
+        }
+        
+        //richtige Antwort SOUND HERE
+        
+        
         return true;
     }
 }

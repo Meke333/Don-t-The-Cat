@@ -30,6 +30,24 @@ TagManager:
   - Button
   - LeverParent
   - LampParent
+  - CinemachineTarget
+  - Lever4_3
+  - Lever2_2
+  - Lever3_4
+  - Lever1_1
+  - Lever3_3
+  - Lever3_1
+  - Lever1_3
+  - Lever3_2
+  - Lever4_1
+  - Lever2_3
+  - Lever1_4
+  - Lever4_2
+  - Lever4_4
+  - Lever1_2
+  - Lever2_4
+  - Lever2_1
+  - Levels
   layers:
   - Default
   - TransparentFX
