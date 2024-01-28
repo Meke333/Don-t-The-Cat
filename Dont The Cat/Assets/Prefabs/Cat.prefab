@@ -65,12 +65,18 @@ MonoBehaviour:
   nextLocation: 0
   state: 0
   stage: 0
-  isTimerDone: 0
+  isNothingTimerDone: 0
+  isReactionTimerDone: 0
   reactionTime: 5000
   catMinNothingTime: 2500
   catMaxNothingTime: 7500
   underpettedLimit: 0.44999998807907104
   overpettedLimit: 0.800000011920929
+  absolutelyOverpettedLimit: 0
+  wasVaseElimintaed: 0
+  wasUrneElimintaed: 0
+  wasRadioEliminated: 0
+  wasSelftdestructionButtonEliminated: 0
 --- !u!114 &2715736473000943572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,44 +89,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 308418478b19f544e8084936f70f8d19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpPositionAnimation:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.56341505
-      value: 0.7444575
-      inSlope: 0.8422861
-      outSlope: 0.8422861
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  jumpDistanceForward: 0.5
-  jumpDurationInSeconds: 1
-  speed: 1
-  gravity: 20
-  jumpSpeed: 8
+  jumpCounter: 0
   moveDirection: {x: 0, y: 0, z: 0}
   targetLocationEnum: 0
   targetPosition: {x: 0, y: 0, z: 0}
@@ -131,10 +100,15 @@ MonoBehaviour:
   RadioPosition: {fileID: 0}
   SelfDestructButtonPosition: {fileID: 0}
   characterController: {fileID: 145449181808509619}
-  rigidbody: {fileID: 0}
   layerMask:
     serializedVersion: 2
     m_Bits: 8
+  angle: 0
+  cross: {x: 0, y: 0, z: 0}
+  distanceToTarget: 0
+  speed: 1
+  gravity: 20
+  jumpSpeed: 8
 --- !u!143 &145449181808509619
 CharacterController:
   m_ObjectHideFlags: 0
@@ -199,7 +173,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7693936056148263850
 Transform:
   m_ObjectHideFlags: 0
@@ -295,5 +269,80 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7693936056148263850}
+  - {fileID: 6346463139907943823}
   m_Father: {fileID: 7422698325436220124}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &6888699715537328740
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5709295612868174443}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: ab9c2f585d95e824abc154957b145a14, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 7.9986515
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab9c2f585d95e824abc154957b145a14, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 7.9986515
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab9c2f585d95e824abc154957b145a14, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 7.9986515
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab9c2f585d95e824abc154957b145a14, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab9c2f585d95e824abc154957b145a14, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.486
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab9c2f585d95e824abc154957b145a14, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.138
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab9c2f585d95e824abc154957b145a14, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab9c2f585d95e824abc154957b145a14, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab9c2f585d95e824abc154957b145a14, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab9c2f585d95e824abc154957b145a14, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab9c2f585d95e824abc154957b145a14, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab9c2f585d95e824abc154957b145a14, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab9c2f585d95e824abc154957b145a14, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ab9c2f585d95e824abc154957b145a14, type: 3}
+      propertyPath: m_Name
+      value: evilgato_pullsGun_final
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ab9c2f585d95e824abc154957b145a14, type: 3}
+--- !u!4 &6346463139907943823 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ab9c2f585d95e824abc154957b145a14, type: 3}
+  m_PrefabInstance: {fileID: 6888699715537328740}
+  m_PrefabAsset: {fileID: 0}

@@ -68,11 +68,14 @@ public class PlayerBehaviour : MonoBehaviour
     public Image triggerIcon;
     public Sprite q_key_icon, e_key_icon, mousewiggle_key_icon;
 
+    private bool hasPlayerDied;
+
     private void Awake()
     {
         _playerScript = GetComponent<PlayerScript>();
         triggerIcon.gameObject.SetActive(false);
         catPettingTimer.SetTimer(catPettingTime);
+        hasPlayerDied = false;
     }
 
     async private void OnEnable()
@@ -352,17 +355,22 @@ public class PlayerBehaviour : MonoBehaviour
 
     async void Die()
     {
-        //if (state != PlayerState.Die)
+        if (!hasPlayerDied)
+        {
+            hasPlayerDied = true;
+            //if (state != PlayerState.Die)
             //return;
 
-        //Stop walking
-        cameraAnimator.SetBool("IsWalking", false);
+            //Stop walking
+            cameraAnimator.SetBool("IsWalking", false);
 
-        //Look at cat
-        CameraPosition.LookAt(CatPosition);
+            //Look at cat
+            CameraPosition.LookAt(CatPosition);
 
-        await Task.Delay(2000);
-        SceneManager.LoadScene("MENU");
+            await Task.Delay(2000);
+            Cursor.visible  = true;
+            SceneManager.LoadScene("MENU");
+        }
     }
 
     void Looking()

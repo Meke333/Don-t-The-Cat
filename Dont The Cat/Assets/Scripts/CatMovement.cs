@@ -47,6 +47,8 @@ public class CatMovement : MonoBehaviour
     private void Awake()
     {
         _catScript = GetComponent<CatScript>();
+
+        
     }
 
     private async void OnEnable()
@@ -64,6 +66,14 @@ public class CatMovement : MonoBehaviour
 
     private void Update()
     {
+        Vector3 pos = transform.position;
+        
+        if (pos.y < 0.283f)
+        {
+            pos.y = 0.283f;
+            transform.position = pos;
+        }
+        
         if (!_isTargetActive)
             return;
 
@@ -152,6 +162,7 @@ public class CatMovement : MonoBehaviour
 
         Vector3 rotation = transform.rotation.eulerAngles;
         rotation.x = 0;
+        rotation.y += 180;
         
         gameObject.transform.rotation = Quaternion.Euler(rotation);
         
