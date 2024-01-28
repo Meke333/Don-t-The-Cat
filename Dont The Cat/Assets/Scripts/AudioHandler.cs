@@ -5,23 +5,23 @@ using UnityEngine;
 public enum Clip
 {
     //walking lol
-    Cat_Walking_On_Wood,
+    Cat_Walking_On_Wood,                                                // implemented (CatAnimator) - not tested
     //when cat arrives at interaction
     Paper_Rustle, 
     //when petted too much
-    Agressive_Hissing = 2, //2 times
+    Agressive_Hissing = 2, //2 times                                    // implemented (CatBehavior) - not tested
     //when petted too much
-    Aggressive_Meow = 4, //6 times 
+    Aggressive_Meow = 4, //6 times                                      // implemented (CatBehavior) - not tested
     Aggressive_Scream = 10, //3 times
     Aggressive_Pur = 13,
     //random?
-    Calm_Meow = 14, //9 times (2 times deep voice)
+    Calm_Meow = 14, //9 times (2 times deep voice)                      // implemented (CatBehavior) - not tested
     //when pettet too less
-    Calm_Pet_Demanding = 23, //4 times
+    Calm_Pet_Demanding = 23, //4 times                                  // implemented (CatBehavior) - not tested
     //pleased cat
     Calm_Pur = 27, //2 times
     //at radio or self destruct
-    Cat_Exploding = 29, //4 times 
+    Cat_Exploding = 29, //4 times                                       // implemented (CatBehavior) - not tested
     //clicking on a switch
     Computer_Beep_Boop = 33, //2 times
     //if you press nuke button?
@@ -31,12 +31,12 @@ public enum Clip
     //when you get shot by cat
     Gun_Shot = 38, //2 times 
     //when cat hits selfdestruct button
-    Selfdestruction_Siren = 40,
+    Selfdestruction_Siren = 40,                                         // implemented (CatBehavior) - not tested
     Meow_Melody = 41,
     //if vase/urne fall down
-    Glass_Shatter = 42, //2 times
+    Glass_Shatter = 42, //2 times                                       // implemented (CatBehavior) - not tested
     //when cat lands on ground/object
-    Landing_Sound = 44
+    Landing_Sound = 44                                                  // implemented (CatAnimator) - not tested
 }
 
 public class AudioHandler : MonoBehaviour

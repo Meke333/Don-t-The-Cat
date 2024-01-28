@@ -350,7 +350,7 @@ public class PlayerBehaviour : MonoBehaviour
         //look at disaster -> CameraPosition.LookAt(object);
     }
 
-    void Die()
+    async void Die()
     {
         //if (state != PlayerState.Die)
             //return;
@@ -361,6 +361,7 @@ public class PlayerBehaviour : MonoBehaviour
         //Look at cat
         CameraPosition.LookAt(CatPosition);
 
+        await Task.Delay(2000);
         SceneManager.LoadScene("MENU");
     }
 

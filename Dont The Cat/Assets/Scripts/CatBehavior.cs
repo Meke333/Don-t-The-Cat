@@ -49,6 +49,7 @@ public class CatBehavior : MonoBehaviour
         await Task.Yield();
         GameEventManager.Instance.onCatInteraction += ProcessAction_CatInteraction;
         GameEventManager.Instance.onCatInPetState += ProcessAction_OnCatInPetState;
+        GameEventManager.Instance.onTransmittingPetValue += ProcessAction_onTransmittingPetValue;
     }
 
     private void OnDisable()
@@ -59,6 +60,7 @@ public class CatBehavior : MonoBehaviour
         _catScript.onCatLanded -= SetDangerTimer;
         GameEventManager.Instance.onCatInteraction -= ProcessAction_CatInteraction;
         GameEventManager.Instance.onCatInPetState -= ProcessAction_OnCatInPetState;
+        GameEventManager.Instance.onTransmittingPetValue -= ProcessAction_onTransmittingPetValue;
     }
 
     private void Update()
@@ -153,7 +155,9 @@ public class CatBehavior : MonoBehaviour
 
                 if (state == CatState.InPetMode)
                     return;
-                
+
+                AudioHandler.Instance.PlaySingleSound(Clip.Glass_Shatter);
+
                 //DEAD
                 GameEventManager.Instance.onPlayerDied?.Invoke();
                 
@@ -176,7 +180,9 @@ public class CatBehavior : MonoBehaviour
                 
                 if (state == CatState.InPetMode)
                     return;
-                
+
+                AudioHandler.Instance.PlaySingleSound(Clip.Glass_Shatter);
+
                 //DEAD
                 GameEventManager.Instance.onYouHaveNotPleasedTheCatInTime?.Invoke();
                 GameEventManager.Instance.onPlayerDied?.Invoke();
@@ -200,6 +206,8 @@ public class CatBehavior : MonoBehaviour
                 
                 if (state == CatState.InPetMode)
                     return;
+
+                AudioHandler.Instance.PlaySingleSound(Clip.Cat_Exploding);
                 
                 //DEAD
                 GameEventManager.Instance.onPlayerDied?.Invoke();
@@ -223,7 +231,9 @@ public class CatBehavior : MonoBehaviour
                 
                 if (state == CatState.InPetMode)
                     return;
-                
+
+                AudioHandler.Instance.PlaySingleSound(Clip.Selfdestruction_Siren);
+
                 //DEAD
                 GameEventManager.Instance.onPlayerDied?.Invoke();
                 
@@ -297,6 +307,18 @@ public class CatBehavior : MonoBehaviour
         GameEventManager.Instance.onCatReaction?.Invoke(newCatState);
         
         Debug.Log("CAT INTERACTION WEWO: " + newCatState);
+    }
+
+    void ProcessAction_onTransmittingPetValue(double value)
+    {
+        if (value < underpettedLimit)
+            AudioHandler.Instance.PlaySingleSound(Clip.Calm_Pet_Demanding); //demanding
+        else if (value > overpettedLimit)
+        {
+            AudioHandler.Instance.PlaySingleSound(Random.Range(0, 7) > 5 ? Clip.Agressive_Hissing : Clip.Aggressive_Meow); //1/4 hissing, 3/4 meowing
+        }
+        else
+            AudioHandler.Instance.PlaySingleSound(Random.Range(0, 3) > 2 ? Clip.Calm_Pur : Clip.Calm_Meow); //1/3 puring, 2/3 meowing
     }
 
     private void ProcessAction_OnCatInPetState()
