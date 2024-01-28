@@ -311,16 +311,22 @@ public class PlayerBehaviour : MonoBehaviour
                 //Debug.Log("Detected object: " + targetObject.name);
                 if (targetObject.CompareTag("cat"))
                 {
+                    GameEventManager.Instance.onCatGettingPet.Invoke(true);
+
                     float mouse_x_dif = _mouseX - _lastMouseX;
                     float mouse_y_dif = _mouseY - _lastMouseY;
                     double distance = Math.Sqrt(Math.Pow((double)mouse_x_dif, 2) + Math.Pow((double)mouse_y_dif, 2));
 
                     catMeter = (catMeter < 1.0 ? catMeter + distance * 1.4 * Time.deltaTime : 1.0);
+                } else
+                {
+                    GameEventManager.Instance.onCatGettingPet.Invoke(false);
                 }
             }
         }
         else
         {
+            GameEventManager.Instance.onCatGettingPet.Invoke(false);
             catMeter = (catMeter > 0.0 ? catMeter - 0.01 * Time.deltaTime: 0.0);
         }
 
