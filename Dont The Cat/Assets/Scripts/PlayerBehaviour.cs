@@ -368,6 +368,7 @@ public class PlayerBehaviour : MonoBehaviour
             CameraPosition.LookAt(CatPosition);
 
             await Task.Delay(2000);
+            Cursor.visible  = true;
             SceneManager.LoadScene("MENU");
         }
     }
