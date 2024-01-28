@@ -11,16 +11,35 @@ TagManager:
   - cat_location_vase
   - cat_location_radio
   - cat_location_selfdestruct_button
+  - Lever_1_1
+  - Lever_1_2
+  - Lever_1_3
+  - Lever_1_4
+  - Lever_2_1
+  - Lever_2_2
+  - Lever_2_3
+  - Lever_2_4
+  - Lever_3_1
+  - Lever_3_2
+  - Lever_3_3
+  - Lever_3_4
+  - Lever_4_1
+  - Lever_4_2
+  - Lever_4_3
+  - Lever_4_4
+  - Button
+  - LeverParent
+  - LampParent
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - DestroyableByCat
+  - CatDestroyable
   - Water
   - UI
+  - Lever
+  - Button
   - Player
-  - 
-  - 
   - 
   - 
   - 

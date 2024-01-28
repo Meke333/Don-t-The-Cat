@@ -43,6 +43,8 @@ public class PlayerBehaviour : MonoBehaviour
     private bool inWorkLocation = false;
 
     public CatLocation cat_location;
+    public Camera playerCamera;
+    public Camera workCamera;
 
     private Timer catPettingTimer = new Timer();
     
@@ -193,10 +195,19 @@ public class PlayerBehaviour : MonoBehaviour
         {
             _playerScript.onPlayerStateChange.Invoke(PlayerState.Working);
             setTriggerKeyIcon(true, 1); //show E
+            
+            //Switch Camera
+            SwitchCamera(true);
+
         } else if(inWorkLocation && Input.GetKeyDown(KeyCode.E)) //in work-triggerbox and pressed e -> go into walking mode
         {
             _playerScript.onPlayerStateChange.Invoke(PlayerState.Walking);
             setTriggerKeyIcon(true, 0); //show Q
+
+            //Switch Camera
+            SwitchCamera(false);
+
+
         }
     }
 
@@ -341,6 +352,21 @@ public class PlayerBehaviour : MonoBehaviour
         CameraPosition.localRotation = Quaternion.Euler(xRotation, yRotation, 0f);
         //transform.Rotate(_mouseY * Time.deltaTime * Vector3.right);
         //transform.Rotate( _mouseX * Time.deltaTime * Vector3.up);
+    }
+
+    void SwitchCamera(bool toWork)
+    {
+        switch (toWork)
+        {
+            case true:
+                playerCamera.enabled = false;
+                workCamera.enabled = true;
+                break;
+            case false:
+                playerCamera.enabled = true;
+                workCamera.enabled = false;
+                break;
+        }
     }
 
     #region EventMethods
