@@ -168,7 +168,10 @@ public class Raycast : MonoBehaviour
             {
                 if(levers[i, j].isUp == level1[i, j])
                 {
+                    //GameOver
+                    GameEventManager.Instance.onPlayerDied?.Invoke();
                     return false;
+
                 }
             }
         }
