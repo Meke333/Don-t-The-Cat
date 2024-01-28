@@ -5,9 +5,9 @@ using UnityEngine;
 public enum Clip
 {
     //walking lol
-    Cat_Walking_On_Wood,                                                // implemented (CatAnimator) - not tested
+    Cat_Walking_On_Wood,                                                // implemented (CatAnimator) - maybe tested
     //when cat arrives at interaction
-    Paper_Rustle,                                                       // implemented (CatAnimator) - not tested    
+    Paper_Rustle,                                                       // implemented (CatAnimator) - maybe tested    
     //when petted too much
     Agressive_Hissing = 2, //2 times                                    // implemented (CatBehavior) - not tested
     //when petted too much
