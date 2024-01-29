@@ -10,6 +10,8 @@ using Vector3 = UnityEngine.Vector3;
 
 public class CatMovement : MonoBehaviour
 {
+    public Transform playerTransform;
+    
     private CatScript _catScript;
 
     public int jumpCounter = 0;
@@ -218,6 +220,8 @@ public class CatMovement : MonoBehaviour
     {
         if (state == CatState.Pleased)
             jumpCounter = 0;
+        else if (state == CatState.Overpetted)
+            transform.LookAt(playerTransform);
     }
 
     #endregion

@@ -42,6 +42,7 @@ public class CatAnimator : MonoBehaviour
         GameEventManager.Instance.onCatInPetState += ProcessAction_OnCatInPetState;
         GameEventManager.Instance.onCatGettingPet += ProcessAction_OnCatGettingPet;
         GameEventManager.Instance.onYouHaveNotPleasedTheCatInTime += ProcessAction_onYouHaveNotPleasedTheCatInTime;
+        GameEventManager.Instance.onCatReaction += StopPet;
     }
 
     private void OnDisable()
@@ -54,6 +55,7 @@ public class CatAnimator : MonoBehaviour
         GameEventManager.Instance.onCatInPetState -= ProcessAction_OnCatInPetState;
         GameEventManager.Instance.onCatGettingPet -= ProcessAction_OnCatGettingPet;
         GameEventManager.Instance.onYouHaveNotPleasedTheCatInTime -= ProcessAction_onYouHaveNotPleasedTheCatInTime;
+        GameEventManager.Instance.onCatReaction -= StopPet;
     }
 
     #region EventMethods
@@ -144,6 +146,12 @@ public class CatAnimator : MonoBehaviour
     void ProcessAction_onYouHaveNotPleasedTheCatInTime()
     {
         catAnimator.SetTrigger(Names.AnticipationToTheIncident);
+    }
+
+    void StopPet(CatState a)
+    {
+        catAnimator.SetTrigger(Names.PetTimerDone);
+        catAnimator.SetBool(Names.IsPetting, false);
     }
     
 
